@@ -575,7 +575,7 @@
         }
     };
 
-    // Default sample questions (coordinates are local to each half sheet: 0 to 561.5px)
+    // Default sample questions (coordinates local to .half-content: 0,0 is right below header)
     let questions = [
         { 
             id: 101, 
@@ -583,9 +583,9 @@
             type: "bigQ", 
             bigQ: 1, 
             text: "次の連立方程式を解きなさい。", 
-            x: 52, 
-            y: 72,
-            width: 690, 
+            x: 0, 
+            y: 6,
+            width: 688, 
             height: 36,
             fontSize: 12,
             forcePageBreak: false
@@ -599,9 +599,9 @@
             equation: "$$\\begin{cases} 4x + y = 4 \\\\ x + y = -5 \\end{cases}$$", 
             explanation: "4x + y = 4 ... ①\nx + y = -5 ... ②\n① - ② より 3x = 9, x = 3 | yの係数が揃っているので引き算します。\nx = 3 を①に代入して 12 + y = 4, y = -8 | 解を代入してyを求めます。", 
             answer: "x = 3, y = -8", 
-            x: 52, 
-            y: 118, 
-            width: 335, 
+            x: 0, 
+            y: 50, 
+            width: 334, 
             height: 180,
             fontSize: 12,
             forcePageBreak: false
@@ -615,9 +615,9 @@
             equation: "$$\\begin{cases} 2x + 5y = 18 \\\\ x = 2y \\end{cases}$$", 
             explanation: "x = 2y を 2x + 5y = 18 に代入 | 代入法を使って計算します。\n2(2y) + 5y = 18\n4y + 5y = 18, 9y = 18, y = 2 | 同類項をまとめてyを求めます。\ny = 2 を x = 2y に代入して x = 4 | 代入してxを求めます。", 
             answer: "x = 4, y = 2", 
-            x: 407, 
-            y: 118, 
-            width: 335, 
+            x: 354, 
+            y: 50, 
+            width: 334, 
             height: 180,
             fontSize: 12,
             forcePageBreak: false
@@ -664,14 +664,14 @@
     {
       "id": 101, "pageIndex": 1, "type": "bigQ", "bigQ": 1,
       "text": "次の連立方程式を解きなさい。",
-      "x": 52, "y": 72, "width": 690, "height": 36, "fontSize": 12
+      "x": 0, "y": 6, "width": 688, "height": 36, "fontSize": 12
     },
     {
       "id": 1, "pageIndex": 1, "type": "subQ", "bigQ": 1, "subQ": 1,
       "equation": "$$\\\\begin{cases} 2x + y = 7 \\\\\\\\ x - y = -1 \\\\end{cases}$$",
       "explanation": "2x + y = 7 ... ①\\\\nx - y = -1 ... ②\\\\n① + ② より 3x = 6, x = 2 | 足し算をしてyを消去\\\\nx = 2 を①に代入して y = 3 | 代入してyを求める",
       "answer": "x = 2, y = 3",
-      "x": 52, "y": 118, "width": 335, "height": 180, "fontSize": 12
+      "x": 0, "y": 50, "width": 334, "height": 180, "fontSize": 12
     }
   ]
 }
@@ -930,12 +930,14 @@
             }
         }
 
-        const colWidth = 335;
-        const bigWidth = 690;
-        const startX = 52;
+        // half-sheetの内幅(794 - 14mm*2 ≒ 688px)に合わせた設計
+        const contentWidth = 688;
         const gapX = 20;
-        const startY = 72; // Below the 2-tier header
-        const availableHeight = 475; // Available vertical space in each 561.5px half sheet
+        const colWidth = Math.floor((contentWidth - gapX) / 2); // 334px
+        const bigWidth = contentWidth; // 688px
+        const startX = 0; // .half-contentの左端から開始
+        const startY = 6; // ヘッダー下線の直下から開始
+        const availableHeight = 430; // 半券内で利用可能な縦領域
 
         for (let p = 1; p <= maxPage; p++) {
             const pageQs = questions.filter(q => q.pageIndex === p);
@@ -943,8 +945,8 @@
 
             const bigQs = pageQs.filter(q => q.type === 'bigQ');
             const bigQCount = bigQs.length;
-            const bigQFixedH = 36;
-            const gapY = 10;
+            const bigQFixedH = 34;
+            const gapY = 8;
 
             let totalSubRows = 0;
             const bigQGroups = {};
@@ -964,7 +966,7 @@
             const remainingForSubs = Math.max(80, availableHeight - usedByBigQ);
 
             let optimalSubHeight = totalSubRows > 0 ? Math.floor(remainingForSubs / totalSubRows) : 180;
-            optimalSubHeight = Math.max(70, Math.min(240, optimalSubHeight));
+            optimalSubHeight = Math.max(60, Math.min(230, optimalSubHeight));
 
             let currentY = startY;
             const sortedBigNums = Object.keys(bigQGroups).map(Number).sort((a, b) => a - b);
@@ -1051,10 +1053,10 @@
                         type: "bigQ",
                         bigQ: newBigQNum,
                         text: "次の問いに答えなさい。",
-                        x: 52,
-                        y: 72,
-                        width: 690,
-                        height: 36,
+                        x: 0,
+                        y: 6,
+                        width: 688,
+                        height: 34,
                         fontSize: globalBigQFontSize,
                         forcePageBreak: false
                     };
@@ -1152,12 +1154,12 @@
                     document.getElementById('cell-border-style').value = newData.cellBorderStyle;
                 }
 
-                // タイトルの最適化チェック
-                const info = predictGradeAndUnitFromQuestions();
-                if (pageMeta[activeEditPageIndex]) {
-                    pageMeta[activeEditPageIndex].title = autoFormatSheetTitle(pageMeta[activeEditPageIndex].title);
+                // タイトルの最適化チェック（要件⑤に合致させる）
+                for (let p in pageMeta) {
+                    pageMeta[p].title = autoFormatSheetTitle(pageMeta[p].title);
                 }
 
+                // 旧コードの絶対座標(y=125など)を上下2分割用に自動リフローで再計算
                 reorderAndReflowQuestions();
                 renderTabs();
                 loadPageMetaToInputs();
@@ -1166,7 +1168,7 @@
                 updatePreview();
                 textarea.value = '';
                 markAsModified();
-                showNotification("🚀 データを完璧に上書き・復元しました！");
+                showNotification("🚀 データを完璧に上書き・自動配置しました！");
             } else if (Array.isArray(newData)) {
                 questions = newData.map(q => {
                     q.explanation = parseExplanationToString(q.explanation);
@@ -1495,16 +1497,16 @@
 
         switch (e.key) {
             case 'ArrowUp':
-                target[yKey] = Math.max(0, (target[yKey] || 70) - step);
+                target[yKey] = Math.max(0, (target[yKey] || 6) - step);
                 break;
             case 'ArrowDown':
-                target[yKey] = Math.min(HALF_HEIGHT_PX - (target[hKey] || 40), (target[yKey] || 70) + step);
+                target[yKey] = Math.min(440 - (target[hKey] || 36), (target[yKey] || 6) + step);
                 break;
             case 'ArrowLeft':
-                target[xKey] = Math.max(0, (target[xKey] || 52) - step);
+                target[xKey] = Math.max(0, (target[xKey] || 0) - step);
                 break;
             case 'ArrowRight':
-                target[xKey] = Math.min(A4_WIDTH_PX - (target[wKey] || 335), (target[xKey] || 52) + step);
+                target[xKey] = Math.min(688 - (target[wKey] || 334), (target[xKey] || 0) + step);
                 break;
         }
 
@@ -1678,11 +1680,11 @@
                 pageIndex: activeEditPageIndex,
                 type: "bigQ",
                 bigQ: nextBigQ,
-                text: "次の計算をしなさい。",
-                x: 52,
-                y: 72,
-                width: 690,
-                height: 36,
+                text: "次の問いに答えなさい。",
+                x: 0,
+                y: 6,
+                width: 688,
+                height: 34,
                 fontSize: globalBigQFontSize,
                 forcePageBreak: false
             });
@@ -1697,9 +1699,9 @@
                 equation: "$$\\begin{cases} x + y = 6 \\\\ x - y = 2 \\end{cases}$$",
                 explanation: "x + y = 6 ... ①\nx - y = 2 ... ②\n① + ② より 2x = 8, x = 4 | 足し算をしてyを消去\nx = 4 を①に代入して 4 + y = 6, y = 2 | 解を代入してyを求める",
                 answer: "x = 4, y = 2",
-                x: 52,
-                y: 118,
-                width: 335,
+                x: 0,
+                y: 50,
+                width: 334,
                 height: 180,
                 fontSize: globalSubQFontSize,
                 forcePageBreak: false
@@ -1888,10 +1890,10 @@
 
                 pageQuestions.forEach((q) => {
                     const cell = document.createElement('div');
-                    cell.style.left = (q.x || 52) + "px";
-                    cell.style.top = (q.y || 72) + "px"; 
-                    cell.style.width = (q.width || (q.type === 'bigQ' ? 690 : 335)) + "px";
-                    cell.style.height = (q.height || (q.type === 'bigQ' ? 36 : 180)) + "px";
+                    cell.style.left = (q.x !== undefined ? q.x : 0) + "px";
+                    cell.style.top = (q.y !== undefined ? q.y : 6) + "px"; 
+                    cell.style.width = (q.width || (q.type === 'bigQ' ? 688 : 334)) + "px";
+                    cell.style.height = (q.height || (q.type === 'bigQ' ? 34 : 180)) + "px";
                     cell.dataset.qId = q.id;
                     cell.dataset.section = isBottomSection ? "bottom" : "top";
 
@@ -2000,10 +2002,10 @@
             [topContentArea, bottomContentArea].forEach((contentArea) => {
                 pageQuestions.forEach((q) => {
                     const cell = document.createElement('div');
-                    cell.style.left = (q.exp_x || q.x || 52) + "px";
-                    cell.style.top = (q.exp_y || q.y || 72) + "px"; 
-                    cell.style.width = (q.exp_width || q.width || (q.type === 'bigQ' ? 690 : 335)) + "px";
-                    cell.style.height = (q.exp_height || q.height || (q.type === 'bigQ' ? 36 : 180)) + "px";
+                    cell.style.left = (q.exp_x !== undefined ? q.exp_x : (q.x !== undefined ? q.x : 0)) + "px";
+                    cell.style.top = (q.exp_y !== undefined ? q.exp_y : (q.y !== undefined ? q.y : 6)) + "px"; 
+                    cell.style.width = (q.exp_width || q.width || (q.type === 'bigQ' ? 688 : 334)) + "px";
+                    cell.style.height = (q.exp_height || q.height || (q.type === 'bigQ' ? 34 : 180)) + "px";
                     cell.dataset.qId = q.id;
 
                     const qFontSize = q.fontSize || (q.type === 'bigQ' ? globalBigQFontSize : globalSubQFontSize);
@@ -2401,12 +2403,8 @@
         const startClientX = isTouch ? e.touches[0].clientX : e.clientX;
         const startClientY = isTouch ? e.touches[0].clientY : e.clientY;
 
-        const startLocalX = qData[xKey] || 52;
-        const startLocalY = qData[yKey] || 72;
-
-        const contentArea = container.closest('.half-content');
-        const contentRect = contentArea.getBoundingClientRect();
-        const currentScale = contentRect.width / (A4_WIDTH_PX - 28 * 3.78); // local content scale
+        const startLocalX = qData[xKey] !== undefined ? qData[xKey] : 0;
+        const startLocalY = qData[yKey] !== undefined ? qData[yKey] : 6;
 
         // 両方の半券の対応要素を取得して同時にスタイル追従
         const allTwinCells = document.querySelectorAll(`[data-q-id="${id}"]`);
@@ -2426,9 +2424,9 @@
             let newX = Math.round(startLocalX + dx);
             let newY = Math.round(startLocalY + dy);
 
-            // 半券の幅・高さ内に制限
-            newX = Math.max(10, Math.min(A4_WIDTH_PX - (qData[wKey] || 335) - 10, newX));
-            newY = Math.max(10, Math.min(480 - (qData[hKey] || 100), newY));
+            // 半券コンテンツエリア（幅688px、高さ約450px）内に制限
+            newX = Math.max(0, Math.min(688 - (qData[wKey] || 334), newX));
+            newY = Math.max(0, Math.min(450 - (qData[hKey] || 60), newY));
 
             qData[xKey] = newX;
             qData[yKey] = newY;
@@ -2469,7 +2467,7 @@
         const isTouch = e.type.startsWith('touch');
         const startClientX = isTouch ? e.touches[0].clientX : e.clientX;
         const startClientY = isTouch ? e.touches[0].clientY : e.clientY;
-        const startWidth = qData[wKey] || 335;
+        const startWidth = qData[wKey] || 334;
         const startHeight = qData[hKey] || 180;
 
         const scaleFactor = (document.getElementById('zoom-slider').value / 100);
@@ -2488,8 +2486,8 @@
             let newWidth = startWidth + dx;
             let newHeight = startHeight + dy;
 
-            newWidth = Math.max(100, Math.min(A4_WIDTH_PX - (qData[xKey] || 52), newWidth)); 
-            newHeight = Math.max(30, Math.min(480 - (qData[yKey] || 72), newHeight)); 
+            newWidth = Math.max(100, Math.min(688 - (qData[xKey] || 0), newWidth)); 
+            newHeight = Math.max(28, Math.min(450 - (qData[yKey] || 6), newHeight)); 
 
             qData[wKey] = Math.round(newWidth);
             qData[hKey] = Math.round(newHeight);
