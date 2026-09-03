@@ -102,7 +102,7 @@
             overflow: hidden;
         }
 
-        /* Mid-page horizontal divider line */
+        /* Mid-page horizontal divider line (line only, no text) */
         .mid-cut-line {
             position: absolute;
             left: 0;
@@ -296,7 +296,7 @@
                 </div>
             </div>
 
-            <!-- Font Sizes (Defaults: Title 18pt, BigQ 12pt, SubQ 12pt) -->
+            <!-- Font Sizes (Defaults: Title 18pt, BigQ 11pt, SubQ 11pt) -->
             <div class="space-y-2 pt-1 border-t border-slate-800/60">
                 <label class="block text-[10px] text-slate-400 font-bold">🔠 文字サイズ一括調整 (BIZ UDゴシック)</label>
                 <div class="grid grid-cols-3 gap-1.5 text-xs">
@@ -312,7 +312,7 @@
                         <span class="text-[9px] text-slate-400 mb-1">大問指示文</span>
                         <div class="flex items-center space-x-1">
                             <button onclick="changeAllFontSize('bigQ', -1)" class="w-5 h-5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded flex items-center justify-center">-</button>
-                            <span id="bigq-size-val" class="font-mono font-bold text-amber-400 text-xs min-w-[28px] text-center">12pt</span>
+                            <span id="bigq-size-val" class="font-mono font-bold text-amber-400 text-xs min-w-[28px] text-center">11pt</span>
                             <button onclick="changeAllFontSize('bigQ', 1)" class="w-5 h-5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded flex items-center justify-center">+</button>
                         </div>
                     </div>
@@ -320,7 +320,7 @@
                         <span class="text-[9px] text-slate-400 mb-1">小問枠</span>
                         <div class="flex items-center space-x-1">
                             <button onclick="changeAllFontSize('subQ', -1)" class="w-5 h-5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded flex items-center justify-center">-</button>
-                            <span id="subq-size-val" class="font-mono font-bold text-indigo-400 text-xs min-w-[28px] text-center">12pt</span>
+                            <span id="subq-size-val" class="font-mono font-bold text-indigo-400 text-xs min-w-[28px] text-center">11pt</span>
                             <button onclick="changeAllFontSize('subQ', 1)" class="w-5 h-5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold rounded flex items-center justify-center">+</button>
                         </div>
                     </div>
@@ -363,6 +363,7 @@
             <div class="flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none" id="page-tabs-container"></div>
         </div>
 
+        <!-- Title and Grade/Unit Meta -->
         <div class="bg-slate-800/40 p-3 rounded-xl border border-slate-800 space-y-2">
             <div class="flex items-center justify-between border-b border-slate-800 pb-1">
                 <h3 class="text-xs font-bold text-indigo-400" id="title-input-label">1枚目のヘッダータイトル</h3>
@@ -405,6 +406,7 @@
         </div>
     </aside>
 
+    <!-- Main Workspace / Print Preview -->
     <main id="preview-scroll-container" class="flex-1 bg-slate-800 p-6 overflow-auto flex flex-col items-center relative min-h-0 transition-all duration-300">
         <button id="floating-sidebar-btn" onclick="toggleSidebar()" class="absolute top-4 left-4 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-xs font-bold shadow-2xl z-40 hidden transition duration-200 no-print">
             ▶ 編集パネルを開く
@@ -563,10 +565,10 @@
     let currentFileName = "math_quiz_twosplit.html"; 
     let isModified = false; 
 
-    // Typography defaults: Title 18pt, BigQ 12pt, SubQ 12pt
+    // Typography defaults: Title 18pt, BigQ 11pt, SubQ 11pt
     let globalTitleFontSize = 18;
-    let globalBigQFontSize = 12;
-    let globalSubQFontSize = 12;
+    let globalBigQFontSize = 11;
+    let globalSubQFontSize = 11;
     let showOnlyAnswer = false; 
 
     let pageMeta = {
@@ -584,10 +586,10 @@
             bigQ: 1, 
             text: "次の連立方程式を解きなさい。", 
             x: 0, 
-            y: 6,
+            y: 6, 
             width: 688, 
             height: 36,
-            fontSize: 12,
+            fontSize: 11,
             forcePageBreak: false
         },
         { 
@@ -603,7 +605,7 @@
             y: 50, 
             width: 334, 
             height: 180,
-            fontSize: 12,
+            fontSize: 11,
             forcePageBreak: false
         },
         { 
@@ -619,7 +621,7 @@
             y: 50, 
             width: 334, 
             height: 180,
-            fontSize: 12,
+            fontSize: 11,
             forcePageBreak: false
         }
     ];
@@ -653,6 +655,11 @@
 3. タイトル形式は **「〇年小テスト　「単元名」」** としてください。
 4. 数式は KaTeX / LaTeX 形式で正確に記述してください。
 
+# データの仕様
+- 上下2分割（横幅688px、縦430px）の半面スペースに綺麗に収まるよう配置します。
+- 大問 (type: "bigQ"): 幅688px、高さ36px
+- 小問 (type: "subQ"): 2列配置（左: x=0, 幅334px / 右: x=354, 幅334px）
+
 # JSON形式例
 \`\`\`json
 {
@@ -664,107 +671,31 @@
     {
       "id": 101, "pageIndex": 1, "type": "bigQ", "bigQ": 1,
       "text": "次の連立方程式を解きなさい。",
-      "x": 0, "y": 6, "width": 688, "height": 36, "fontSize": 12
+      "x": 0, "y": 6, "width": 688, "height": 36, "fontSize": 11
     },
     {
       "id": 1, "pageIndex": 1, "type": "subQ", "bigQ": 1, "subQ": 1,
-      "equation": "$$\\\\begin{cases} 2x + y = 7 \\\\\\\\ x - y = -1 \\\\end{cases}$$",
-      "explanation": "2x + y = 7 ... ①\\\\nx - y = -1 ... ②\\\\n① + ② より 3x = 6, x = 2 | 足し算をしてyを消去\\\\nx = 2 を①に代入して y = 3 | 代入してyを求める",
+      "equation": "$$\\begin{cases} 2x + y = 7 \\\\ x - y = -1 \\end{cases}$$",
+      "explanation": "2x + y = 7 ... ①\\nx - y = -1 ... ②\\n① + ② より 3x = 6, x = 2 | 足し算をしてyを消去\\nx = 2 を①に代入して y = 3 | 代入してyを求める",
       "answer": "x = 2, y = 3",
-      "x": 0, "y": 50, "width": 334, "height": 180, "fontSize": 12
+      "x": 0, "y": 50, "width": 334, "height": 180, "fontSize": 11
+    },
+    {
+      "id": 2, "pageIndex": 1, "type": "subQ", "bigQ": 1, "subQ": 2,
+      "equation": "$$\\begin{cases} 3x - 2y = 8 \\\\ y = x - 1 \\end{cases}$$",
+      "explanation": "y = x - 1 を代入 | 代入法で解く\\n3x - 2(x - 1) = 8\\n3x - 2x + 2 = 8, x = 6 | xを求める\\ny = 6 - 1 = 5 | yを求める",
+      "answer": "x = 6, y = 5",
+      "x": 354, "y": 50, "width": 334, "height": 180, "fontSize": 11
     }
   ]
 }
 \`\`\``;
 
     const GEMINI_CHECK_PROMPT = `# あなたの役割
-あなたは中学数学のベテラン校閲教員です。入力された数学問題JSONデータの計算精度、解答の正しさ、立式の妥当性を校閲します。
-問題がない場合は「間違いありません」と回答し、間違いがある場合は修正箇所を出力してください。`;
+あなたは中学数学のベテラン校閲教員です。入力された数学問題JSONデータの解答の正確性、立式の妥当性を校閲します。
+間違いがない場合は「間違いありません」とだけ回答してください。間違いがある場合は修正指示を出力してください。`;
 
     let currentPromptType = 'generate';
-
-    /**
-     * 問題文・数式から「学年」と「単元名」を高精度に推測する
-     */
-    function predictGradeAndUnitFromQuestions() {
-        let predictedGrade = 1;
-        let predictedUnit = "計算問題";
-
-        const textCorpus = questions.map(q => {
-            return (q.text || '') + ' ' + (q.equation || '') + ' ' + (q.explanation || '') + ' ' + (q.answer || '');
-        }).join(' ').toLowerCase();
-
-        // 3年の単元判定
-        if (/三平方|ピタゴラス/.test(textCorpus)) {
-            predictedGrade = 3; predictedUnit = "三平方の定理";
-        } else if (/相似/.test(textCorpus)) {
-            predictedGrade = 3; predictedUnit = "図形の相似";
-        } else if (/円周角/.test(textCorpus)) {
-            predictedGrade = 3; predictedUnit = "円周角の定理";
-        } else if (/二次方程式|2次方程式|x\^2\s*[\+\-]|平方完成|解の公式/.test(textCorpus)) {
-            predictedGrade = 3; predictedUnit = "二次方程式";
-        } else if (/\\sqrt|平方根|ルート/.test(textCorpus)) {
-            predictedGrade = 3; predictedUnit = "平方根";
-        } else if (/展開|因数分解|乗法公式/.test(textCorpus)) {
-            predictedGrade = 3; predictedUnit = "多項式の展開と因数分解";
-        } else if (/y\s*=\s*a?x\^2|二次関数|2乗に比例/.test(textCorpus)) {
-            predictedGrade = 3; predictedUnit = "関数 y=ax²";
-        }
-        // 2年の単元判定
-        else if (/\\begin\{cases\}|\\cases|連立方程式|連立/.test(textCorpus)) {
-            predictedGrade = 2; predictedUnit = "連立方程式";
-        } else if (/一次関数|1次関数|傾き|切片|y\s*=\s*-?\d*x/.test(textCorpus)) {
-            predictedGrade = 2; predictedUnit = "一次関数";
-        } else if (/平行四辺形|二等辺三角形|合同|証明/.test(textCorpus)) {
-            predictedGrade = 2; predictedUnit = "図形の性質と合同";
-        } else if (/確率|さいころ|コイン/.test(textCorpus)) {
-            predictedGrade = 2; predictedUnit = "確率";
-        } else if (/同類項|単項式|多項式の計算|式の計算/.test(textCorpus)) {
-            predictedGrade = 2; predictedUnit = "式の計算";
-        }
-        // 1年の単元判定
-        else if (/比例|反比例|双曲線/.test(textCorpus)) {
-            predictedGrade = 1; predictedUnit = "比例と反比例";
-        } else if (/方程式|解きなさい|x\s*=\s*-?\d+/.test(textCorpus)) {
-            predictedGrade = 1; predictedUnit = "一次方程式";
-        } else if (/正の数|負の数|正負の数|絶対値/.test(textCorpus)) {
-            predictedGrade = 1; predictedUnit = "正の数・負の数";
-        } else if (/文字と式|文字式/.test(textCorpus)) {
-            predictedGrade = 1; predictedUnit = "文字と式";
-        } else if (/平面図形|空間図形|体積|表面積/.test(textCorpus)) {
-            predictedGrade = 1; predictedUnit = "平面・空間図形";
-        }
-
-        return {
-            grade: predictedGrade + "年",
-            unit: predictedUnit,
-            fullTitle: `${predictedGrade}年小テスト　「${predictedUnit}」`
-        };
-    }
-
-    /**
-     * タイトル文字列を解析し、自動判定結果に最適置換する
-     */
-    function autoFormatSheetTitle(existingTitle) {
-        const info = predictGradeAndUnitFromQuestions();
-        if (!existingTitle || existingTitle.includes("数学　練習問題") || existingTitle.includes("小テスト")) {
-            // パターン一致または初期状態なら新仕様タイトルを生成
-            return info.fullTitle;
-        }
-        return existingTitle;
-    }
-
-    function rePredictAndApplyGradeAndUnit() {
-        const info = predictGradeAndUnitFromQuestions();
-        if (pageMeta[activeEditPageIndex]) {
-            pageMeta[activeEditPageIndex].title = info.fullTitle;
-            loadPageMetaToInputs();
-            markAsModified();
-            updatePreview();
-            renderFormList();
-            showNotification(`🎯 問題内容から「${info.fullTitle}」と判定して更新しました！`);
-        }
-    }
 
     function parseExplanationToString(exp) {
         if (!exp) return "";
@@ -781,6 +712,7 @@
 
     window.onload = function() {
         checkAndLoadEmbeddedData();
+
         renderTabs();
         loadPageMetaToInputs();
         renderFormList();
@@ -790,6 +722,7 @@
         
         document.addEventListener('paste', handleGlobalPaste);
         document.addEventListener('keydown', handleKeyDown);
+
         initDragAndDrop();
 
         const scrollContainer = document.getElementById('preview-scroll-container');
@@ -847,20 +780,20 @@
             guideContainer.classList.add('hidden');
             copyBtn.classList.remove('hidden');
             textarea.value = GEMINI_PROMPT;
-            desc.textContent = "Geminiに送信して、A4上下2分割の小テストに即座に取り込める問題JSONデータを生成させるプロンプトです。";
+            desc.textContent = "Geminiに送信して、本アプリに直接取り込めるA4上下2分割用の問題JSONデータを新規作成・生成させるプロンプトです。";
         } else if (type === 'check') {
             btnCheck.className = "flex-1 py-1.5 px-2 text-center text-[11px] font-bold rounded-lg transition-all bg-emerald-600 text-white shadow";
             textContainer.classList.remove('hidden');
             guideContainer.classList.add('hidden');
             copyBtn.classList.remove('hidden');
             textarea.value = GEMINI_CHECK_PROMPT;
-            desc.textContent = "Geminiに送信して、作成された問題JSONの計算ミスや教育的妥当性を校閲させるプロンプトです。";
+            desc.textContent = "Geminiに送信して、作成された問題JSONの計算ミスや教育的妥当性を校閲・チェックさせるプロンプトです。";
         } else if (type === 'guide') {
             btnGuide.className = "flex-1 py-1.5 px-2 text-center text-[11px] font-bold rounded-lg transition-all bg-amber-600 text-white shadow";
             textContainer.classList.add('hidden');
             guideContainer.classList.remove('hidden');
             copyBtn.classList.add('hidden');
-            desc.textContent = "AIを活用して効率よく上下2分割小テストを作成する手順です。";
+            desc.textContent = "生成AI（Gemini）と本アプリを活用して、効率よく正確なプリントを作成する手順です。";
         }
     }
 
@@ -900,10 +833,8 @@
         showNotification("📋 現在の全てのデータをコピーしました！");
     }
 
-    /**
-     * 上半分（高さ561.5px）のスペースに合わせて問題を自動整列・高さ最適化する
-     */
     function reorderAndReflowQuestions() {
+        // Sort questions by page, bigQ, type, subQ
         questions.sort((a, b) => {
             if (a.pageIndex !== b.pageIndex) return a.pageIndex - b.pageIndex;
             if (a.bigQ !== b.bigQ) return a.bigQ - b.bigQ;
@@ -925,19 +856,18 @@
 
         for (let i = 1; i <= maxPage; i++) {
             if (!pageMeta[i]) {
-                const info = predictGradeAndUnitFromQuestions();
-                pageMeta[i] = { title: info.fullTitle };
+                const autoTitle = predictGradeAndUnitFromQuestions();
+                pageMeta[i] = { title: autoTitle };
             }
         }
 
-        // half-sheetの内幅(794 - 14mm*2 ≒ 688px)に合わせた設計
+        // Half-sheet content dimensions: width 688, total height 430px
         const contentWidth = 688;
-        const gapX = 20;
-        const colWidth = Math.floor((contentWidth - gapX) / 2); // 334px
-        const bigWidth = contentWidth; // 688px
-        const startX = 0; // .half-contentの左端から開始
-        const startY = 6; // ヘッダー下線の直下から開始
-        const availableHeight = 430; // 半券内で利用可能な縦領域
+        const colWidth = 334;
+        const colGap = 20;
+        const bigQFixedH = 34;
+        const gapY = 10;
+        const availableHeight = 430;
 
         for (let p = 1; p <= maxPage; p++) {
             const pageQs = questions.filter(q => q.pageIndex === p);
@@ -945,8 +875,6 @@
 
             const bigQs = pageQs.filter(q => q.type === 'bigQ');
             const bigQCount = bigQs.length;
-            const bigQFixedH = 34;
-            const gapY = 8;
 
             let totalSubRows = 0;
             const bigQGroups = {};
@@ -962,13 +890,14 @@
 
             const totalItemsCount = bigQCount + totalSubRows;
             const totalGaps = Math.max(1, totalItemsCount);
+            
             const usedByBigQ = (bigQCount * bigQFixedH) + (totalGaps * gapY);
             const remainingForSubs = Math.max(80, availableHeight - usedByBigQ);
 
             let optimalSubHeight = totalSubRows > 0 ? Math.floor(remainingForSubs / totalSubRows) : 180;
-            optimalSubHeight = Math.max(60, Math.min(230, optimalSubHeight));
+            optimalSubHeight = Math.max(60, Math.min(220, optimalSubHeight));
 
-            let currentY = startY;
+            let currentY = 6;
             const sortedBigNums = Object.keys(bigQGroups).map(Number).sort((a, b) => a - b);
             
             sortedBigNums.forEach(bNum => {
@@ -977,9 +906,9 @@
                 const subs = items.filter(q => q.type === 'subQ').sort((a, b) => a.subQ - b.subQ);
 
                 if (bigHeader) {
-                    bigHeader.x = startX;
+                    bigHeader.x = 0;
                     bigHeader.y = currentY;
-                    bigHeader.width = bigWidth;
+                    bigHeader.width = contentWidth;
                     bigHeader.height = bigQFixedH;
                     currentY += bigQFixedH + gapY;
                 }
@@ -988,13 +917,13 @@
                     const qLeft = subs[i];
                     const qRight = subs[i + 1];
 
-                    qLeft.x = startX;
+                    qLeft.x = 0;
                     qLeft.y = currentY;
                     qLeft.width = colWidth;
                     qLeft.height = optimalSubHeight;
 
                     if (qRight) {
-                        qRight.x = startX + colWidth + gapX;
+                        qRight.x = colWidth + colGap;
                         qRight.y = currentY;
                         qRight.width = colWidth;
                         qRight.height = optimalSubHeight;
@@ -1004,6 +933,45 @@
                 }
             });
         }
+    }
+
+    function moveQuestionToPage(id, targetPage) {
+        const q = questions.find(item => item.id === id);
+        if (!q) return;
+
+        targetPage = parseInt(targetPage);
+        const totalPages = parseInt(document.getElementById('total-pages-select').value);
+
+        if (targetPage < 1) targetPage = 1;
+        if (targetPage > totalPages) {
+            changeTotalPages(targetPage);
+        }
+
+        const oldPage = q.pageIndex;
+        q.pageIndex = targetPage;
+        q.forcePageBreak = false;
+
+        if (q.type === 'bigQ') {
+            const childSubs = questions.filter(item => item.type === 'subQ' && item.bigQ === q.bigQ && item.pageIndex === oldPage);
+            childSubs.forEach(child => {
+                child.pageIndex = targetPage;
+            });
+        }
+
+        reorderAndReflowQuestions();
+        markAsModified();
+        renderFormList();
+        renderTabs();
+        updatePreview();
+
+        showNotification(`📄 大問/小問を ${targetPage} ページ目へ移動しました！`);
+    }
+
+    function moveQuestionPageDelta(id, delta) {
+        const q = questions.find(item => item.id === id);
+        if (!q) return;
+        const currentP = q.pageIndex || 1;
+        moveQuestionToPage(id, currentP + delta);
     }
 
     function appendQuestions() {
@@ -1031,7 +999,7 @@
             }
 
             if (questionsToAdd.length === 0 && freeImagesToAdd.length === 0) {
-                showNotification("問題データが含まれていません。", "error");
+                showNotification("追加可能な問題または画像データが含まれていません。", "error");
                 return;
             }
 
@@ -1052,11 +1020,11 @@
                         pageIndex: activeEditPageIndex,
                         type: "bigQ",
                         bigQ: newBigQNum,
-                        text: "次の問いに答えなさい。",
+                        text: "次の計算をしなさい。",
                         x: 0,
                         y: 6,
                         width: 688,
-                        height: 34,
+                        height: 36,
                         fontSize: globalBigQFontSize,
                         forcePageBreak: false
                     };
@@ -1082,7 +1050,6 @@
                 qCopy.explanation = parseExplanationToString(qCopy.explanation);
                 if (!qCopy.type) qCopy.type = "subQ";
                 if (!qCopy.pageIndex) qCopy.pageIndex = activeEditPageIndex;
-                if (!qCopy.fontSize) qCopy.fontSize = globalSubQFontSize;
                 questions.push(qCopy);
             });
 
@@ -1093,14 +1060,12 @@
                 freeImages.push(imgCopy);
             });
 
-            // 単元名と学年を自動反映
-            const info = predictGradeAndUnitFromQuestions();
-            if (pageMeta[activeEditPageIndex]) {
-                pageMeta[activeEditPageIndex].title = info.fullTitle;
-            }
-
             renumberSubQuestions();
             reorderAndReflowQuestions();
+            
+            // Auto update title for current page
+            pageMeta[activeEditPageIndex] = { title: predictGradeAndUnitFromQuestions() };
+
             renderTabs();
             loadPageMetaToInputs();
             renderFormList();
@@ -1108,7 +1073,7 @@
             updatePreview();
             textarea.value = '';
             markAsModified();
-            showNotification(`🚀 「${info.fullTitle}」として追加しました！`);
+            showNotification(`🚀 既存のデータに新しい問題を追加しました！`);
         } catch (e) {
             console.error(e);
             showNotification("JSONデータの形式が不正です。", "error");
@@ -1141,8 +1106,8 @@
                 document.getElementById('show-only-answer-toggle').checked = showOnlyAnswer;
 
                 globalTitleFontSize = newData.globalTitleFontSize || 18;
-                globalBigQFontSize = newData.globalBigQFontSize || 12;
-                globalSubQFontSize = newData.globalSubQFontSize || 12;
+                globalBigQFontSize = newData.globalBigQFontSize || 11;
+                globalSubQFontSize = newData.globalSubQFontSize || 11;
                 document.getElementById('title-size-val').textContent = globalTitleFontSize + 'pt';
                 document.getElementById('bigq-size-val').textContent = globalBigQFontSize + 'pt';
                 document.getElementById('subq-size-val').textContent = globalSubQFontSize + 'pt';
@@ -1154,13 +1119,13 @@
                     document.getElementById('cell-border-style').value = newData.cellBorderStyle;
                 }
 
-                // タイトルの最適化チェック（要件⑤に合致させる）
-                for (let p in pageMeta) {
-                    pageMeta[p].title = autoFormatSheetTitle(pageMeta[p].title);
+                reorderAndReflowQuestions();
+                
+                // If title is default or legacy, auto predict
+                if (!pageMeta[activeEditPageIndex] || pageMeta[activeEditPageIndex].title.includes("練習問題")) {
+                    pageMeta[activeEditPageIndex] = { title: predictGradeAndUnitFromQuestions() };
                 }
 
-                // 旧コードの絶対座標(y=125など)を上下2分割用に自動リフローで再計算
-                reorderAndReflowQuestions();
                 renderTabs();
                 loadPageMetaToInputs();
                 renderFormList();
@@ -1168,18 +1133,16 @@
                 updatePreview();
                 textarea.value = '';
                 markAsModified();
-                showNotification("🚀 データを完璧に上書き・自動配置しました！");
+                showNotification("🚀 データを完璧に上書き・更新しました！");
             } else if (Array.isArray(newData)) {
                 questions = newData.map(q => {
                     q.explanation = parseExplanationToString(q.explanation);
                     return q;
                 });
-                const info = predictGradeAndUnitFromQuestions();
-                pageMeta[activeEditPageIndex] = { title: info.fullTitle };
-                
                 reorderAndReflowQuestions();
-                loadPageMetaToInputs();
+                pageMeta[activeEditPageIndex] = { title: predictGradeAndUnitFromQuestions() };
                 renderFormList();
+                loadPageMetaToInputs();
                 updatePreview();
                 textarea.value = '';
                 markAsModified();
@@ -1190,6 +1153,64 @@
         } catch (e) {
             console.error(e);
             showNotification("データの形式が不正です。", "error");
+        }
+    }
+
+    function predictGradeAndUnitFromQuestions() {
+        let maxGrade = 1;
+        let detectedUnit = "計算問題";
+
+        const unitRules = [
+            // Grade 3
+            { grade: 3, unit: "三平方の定理", regex: /三平方|斜辺|a\^2\s*\+\s*b\^2/ },
+            { grade: 3, unit: "円周角の定理", regex: /円周角|中心角|孤/ },
+            { grade: 3, unit: "相似な図形", regex: /相似|相似比/ },
+            { grade: 3, unit: "二次方程式", regex: /二次方程式|解の公式|x\^2\s*[\+\-]\s*\d*x/ },
+            { grade: 3, unit: "二次関数", regex: /y\s*=\s*ax\^2|放課線|2次関数/ },
+            { grade: 3, unit: "平方根", regex: /\\sqrt|平方根|ルート/ },
+            { grade: 3, unit: "多項式の展開・因数分解", regex: /因数分解|展開|\(x[\+\-]\d+\)\(x[\+\-]\d+\)/ },
+            
+            // Grade 2
+            { grade: 2, unit: "確率", regex: /確率|サイコロ|玉を取り出す/ },
+            { grade: 2, unit: "平行四辺形と合同", regex: /平行四辺形|合同|証明/ },
+            { grade: 2, unit: "一次関数", regex: /一次関数|傾き|切片|変化の割合/ },
+            { grade: 2, unit: "連立方程式", regex: /\\begin\{cases\}|\\cases|連立方程式/ },
+            { grade: 2, unit: "式の計算", regex: /同類項|多項式|単項式/ },
+
+            // Grade 1
+            { grade: 1, unit: "空間図形", regex: /空間図形|表面積|体積|球|円柱|円錐/ },
+            { grade: 1, unit: "平面図形", regex: /作図|垂直二等分線|角の二等分線/ },
+            { grade: 1, unit: "比例と反比例", regex: /比例|反比例|双曲線/ },
+            { grade: 1, unit: "一次方程式", regex: /方程式|移項/ },
+            { grade: 1, unit: "文字と式", regex: /文字と式|代入/ },
+            { grade: 1, unit: "正の数・負の数", regex: /正の数|負の数|絶対値/ }
+        ];
+
+        let combinedText = "";
+        for (let q of questions) {
+            combinedText += " " + (q.equation || "") + " " + (q.text || "") + " " + (q.explanation || "") + " " + (q.answer || "");
+        }
+
+        for (let rule of unitRules) {
+            if (rule.regex.test(combinedText)) {
+                maxGrade = rule.grade;
+                detectedUnit = rule.unit;
+                break;
+            }
+        }
+
+        return `${maxGrade}年小テスト　「${detectedUnit}」`;
+    }
+
+    function rePredictAndApplyGradeAndUnit() {
+        const predicted = predictGradeAndUnitFromQuestions();
+        if (pageMeta[activeEditPageIndex]) {
+            pageMeta[activeEditPageIndex].title = predicted;
+            loadPageMetaToInputs();
+            markAsModified();
+            updatePreview();
+            renderFormList();
+            showNotification("🎯 問題内容から「" + predicted + "」と予測して反映しました！");
         }
     }
 
@@ -1205,8 +1226,8 @@
                 document.getElementById('show-only-answer-toggle').checked = showOnlyAnswer;
                 
                 globalTitleFontSize = SAVED_DATA.globalTitleFontSize || 18;
-                globalBigQFontSize = SAVED_DATA.globalBigQFontSize || 12;
-                globalSubQFontSize = SAVED_DATA.globalSubQFontSize || 12;
+                globalBigQFontSize = SAVED_DATA.globalBigQFontSize || 11;
+                globalSubQFontSize = SAVED_DATA.globalSubQFontSize || 11;
                 document.getElementById('title-size-val').textContent = globalTitleFontSize + 'pt';
                 document.getElementById('bigq-size-val').textContent = globalBigQFontSize + 'pt';
                 document.getElementById('subq-size-val').textContent = globalSubQFontSize + 'pt';
@@ -1252,17 +1273,6 @@
             dot.className = "inline-block w-2.5 h-2.5 rounded-full bg-emerald-500";
             text.innerHTML = "<span class='text-emerald-400 font-bold'>保存済み</span> - " + currentFileName;
         }
-        
-        const saveBtn = document.getElementById('save-overwrite-btn');
-        if (saveBtn) {
-            if (currentFileHandle) {
-                document.getElementById('save-btn-label').textContent = "上書き保存";
-                saveBtn.title = "現在のファイルを上書き保存します: " + currentFileName + " (Ctrl+S)";
-            } else {
-                document.getElementById('save-btn-label').textContent = "クイック保存";
-                saveBtn.title = "ダウンロード形式で保存します (Ctrl+S)";
-            }
-        }
     }
 
     function markAsModified() {
@@ -1274,19 +1284,6 @@
 
     async function saveFile(isSaveAs = false) {
         clearSelection(); 
-
-        // タイトルから初期ファイル名を生成 (ファイル名禁止文字を安全に置換)
-        let defaultTitle = (pageMeta[1] && pageMeta[1].title) 
-            ? pageMeta[1].title 
-            : (pageMeta[activeEditPageIndex]?.title || "2年小テスト");
-        defaultTitle = defaultTitle.replace(/[\\/:*?"<>|]/g, '_').trim();
-        if (!defaultTitle) defaultTitle = "math_quiz_twosplit";
-        const titleBasedFileName = defaultTitle + ".html";
-
-        // 別名で保存の場合は常にタイトル名、通常保存で既存ファイル名があればそれを優先
-        const suggestedFileName = isSaveAs 
-            ? titleBasedFileName 
-            : (currentFileName && currentFileName !== "math_quiz_twosplit.html" ? currentFileName : titleBasedFileName);
 
         const payload = {
             questions: questions,
@@ -1313,13 +1310,19 @@
             entireHTML = entireHTML.replace(regex, replacement);
         }
 
+        // Generate clean suggested filename from current sheet title
+        let suggestedBase = (pageMeta[activeEditPageIndex]?.title || "小テスト").trim();
+        suggestedBase = suggestedBase.replace(/[\\/:*?"<>|]/g, '_');
+        if (!suggestedBase) suggestedBase = "math_quiz";
+        let suggestedFullName = suggestedBase + ".html";
+
         if (typeof window.showSaveFilePicker === 'function') {
             try {
                 if (isSaveAs || !currentFileHandle) {
                     const options = {
-                        suggestedName: suggestedFileName,
+                        suggestedName: suggestedFullName,
                         types: [{
-                            description: '小テスト作成 HTMLファイル',
+                            description: 'プリントシステム HTML File',
                             accept: { 'text/html': ['.html'] },
                         }],
                     };
@@ -1333,20 +1336,20 @@
 
                 isModified = false;
                 updateFileStatus(currentFileHandle);
-                showNotification("💾 ファイル「" + currentFileName + "」に正常に保存しました！");
+                showNotification("💾 ファイル「" + currentFileHandle.name + "」に正常に保存しました！");
                 return;
             } catch (err) {
                 if (err.name === 'AbortError') return;
+                console.warn("File System Access APIでの保存失敗、ダウンロード保存に移行:", err);
             }
         }
 
         try {
-            let fileNameToSave = suggestedFileName;
-            if (isSaveAs || !currentFileHandle || currentFileName === "math_quiz_twosplit.html") {
-                const nameInput = prompt("保存するファイル名を入力してください:", suggestedFileName.replace('.html', ''));
+            let fileNameToSave = suggestedFullName;
+            if (isSaveAs) {
+                const nameInput = prompt("保存するファイル名を入力してください:", suggestedBase);
                 if (nameInput === null) return;
-                fileNameToSave = nameInput.trim() ? nameInput.trim() : suggestedFileName.replace('.html', '');
-                if (!fileNameToSave.endsWith('.html')) fileNameToSave += '.html';
+                fileNameToSave = (nameInput.trim() || suggestedBase) + ".html";
             }
 
             const blob = new Blob([entireHTML], { type: 'text/html' });
@@ -1427,8 +1430,8 @@
                 document.getElementById('show-only-answer-toggle').checked = showOnlyAnswer;
 
                 globalTitleFontSize = parsed.globalTitleFontSize || 18;
-                globalBigQFontSize = parsed.globalBigQFontSize || 12;
-                globalSubQFontSize = parsed.globalSubQFontSize || 12;
+                globalBigQFontSize = parsed.globalBigQFontSize || 11;
+                globalSubQFontSize = parsed.globalSubQFontSize || 11;
                 document.getElementById('title-size-val').textContent = globalTitleFontSize + 'pt';
                 document.getElementById('bigq-size-val').textContent = globalBigQFontSize + 'pt';
                 document.getElementById('subq-size-val').textContent = globalSubQFontSize + 'pt';
@@ -1449,7 +1452,7 @@
 
                 isModified = false;
                 updateFileStatus(null, fileName);
-                showNotification("🚀 「" + fileName + "」からデータを復元しました！");
+                showNotification("🚀 「" + fileName + "」からデータを引き継ぎました！");
             } else {
                 showNotification("このHTMLファイルには保存データが埋め込まれていません。", "error");
             }
@@ -1503,28 +1506,23 @@
 
         if (!target) return;
 
-        const xKey = isAnswersVisible ? 'exp_x' : 'x';
-        const yKey = isAnswersVisible ? 'exp_y' : 'y';
-        const wKey = isAnswersVisible ? 'exp_width' : 'width';
-        const hKey = isAnswersVisible ? 'exp_height' : 'height';
-
         switch (e.key) {
             case 'ArrowUp':
-                target[yKey] = Math.max(0, (target[yKey] || 6) - step);
+                target.y = Math.max(0, (target.y || 0) - step);
                 break;
             case 'ArrowDown':
-                target[yKey] = Math.min(440 - (target[hKey] || 36), (target[yKey] || 6) + step);
+                target.y = Math.min(430 - (target.height || 45), (target.y || 0) + step);
                 break;
             case 'ArrowLeft':
-                target[xKey] = Math.max(0, (target[xKey] || 0) - step);
+                target.x = Math.max(0, (target.x || 0) - step);
                 break;
             case 'ArrowRight':
-                target[xKey] = Math.min(688 - (target[wKey] || 334), (target[xKey] || 0) + step);
+                target.x = Math.min(688 - (target.width || 334), (target.x || 0) + step);
                 break;
         }
 
-        target[xKey] = Math.round(target[xKey]);
-        target[yKey] = Math.round(target[yKey]);
+        target.x = Math.round(target.x);
+        target.y = Math.round(target.y);
 
         markAsModified();
         updatePreview();
@@ -1562,7 +1560,7 @@
         markAsModified();
         updatePreview();
         renderFormList();
-        showNotification("📐 上下各枠の高さを均等・最適化しました！");
+        showNotification("📐 枠高さを上下半券スペースに自動最適化しました！");
     }
 
     function toggleOnlyAnswer(isChecked) {
@@ -1585,9 +1583,7 @@
         questions.forEach(q => {
             if (q.type === 'subQ') {
                 const key = q.bigQ;
-                if (!groups[key]) {
-                    groups[key] = [];
-                }
+                if (!groups[key]) groups[key] = [];
                 groups[key].push(q);
             }
         });
@@ -1693,11 +1689,11 @@
                 pageIndex: activeEditPageIndex,
                 type: "bigQ",
                 bigQ: nextBigQ,
-                text: "次の問いに答えなさい。",
+                text: "次の計算をしなさい。",
                 x: 0,
                 y: 6,
                 width: 688,
-                height: 34,
+                height: 36,
                 fontSize: globalBigQFontSize,
                 forcePageBreak: false
             });
@@ -1710,7 +1706,7 @@
                 bigQ: nextBigQ,
                 subQ: nextSubQ,
                 equation: "$$\\begin{cases} x + y = 6 \\\\ x - y = 2 \\end{cases}$$",
-                explanation: "x + y = 6 ... ①\nx - y = 2 ... ②\n① + ② より 2x = 8, x = 4 | 足し算をしてyを消去\nx = 4 を①に代入して 4 + y = 6, y = 2 | 解を代入してyを求める",
+                explanation: "x + y = 6 ... ①\nx - y = 2 ... ②\n① + ② より 2x = 8, x = 4 | 足し算をしてyを消去\nx = 4 を①に代入して y = 2 | 解を代入してyを求める",
                 answer: "x = 4, y = 2",
                 x: 0,
                 y: 50,
@@ -1732,7 +1728,6 @@
 
     function setAnswersVisible(visible) {
         isAnswersVisible = visible;
-        activeEditPageIndex = 1; 
         updateModeUI();
         renderTabs();
         loadPageMetaToInputs();
@@ -1743,86 +1738,16 @@
     function updateModeUI() {
         const qBtn = document.getElementById('mode-question-btn');
         const eBtn = document.getElementById('mode-explanation-btn');
-        const autoAlignBtn = document.getElementById('auto-align-btn');
-        const pageTabsSelect = document.getElementById('total-pages-select');
-        const toggleSwitch = document.getElementById('show-only-answer-toggle');
 
         if (qBtn && eBtn) {
             if (isAnswersVisible) {
-                qBtn.className = "flex-1 py-1 px-2 text-center text-xs font-extrabold rounded-md transition-all text-slate-400 hover:text-slate-200";
-                eBtn.className = "flex-1 py-1 px-2 text-center text-xs font-extrabold rounded-md transition-all bg-red-600 text-white shadow-md";
-                if (autoAlignBtn) autoAlignBtn.textContent = "📐 解説の自動整列";
-                if (pageTabsSelect) pageTabsSelect.setAttribute('disabled', 'true');
-                if (toggleSwitch) {
-                    toggleSwitch.disabled = true;
-                    toggleSwitch.parentElement.classList.add('opacity-40', 'cursor-not-allowed');
-                }
+                qBtn.className = "flex-1 py-1 text-center text-xs font-bold rounded-md transition-all text-slate-400 hover:text-slate-200";
+                eBtn.className = "flex-1 py-1 text-center text-xs font-bold rounded-md transition-all bg-red-600 text-white shadow-md";
             } else {
-                qBtn.className = "flex-1 py-1 px-2 text-center text-xs font-extrabold rounded-md transition-all bg-indigo-600 text-white shadow-md";
-                eBtn.className = "flex-1 py-1 px-2 text-center text-xs font-extrabold rounded-md transition-all text-slate-400 hover:text-slate-200";
-                if (autoAlignBtn) autoAlignBtn.textContent = "📐 高さを自動最適化";
-                if (pageTabsSelect) pageTabsSelect.removeAttribute('disabled');
-                if (toggleSwitch) {
-                    toggleSwitch.disabled = false;
-                    toggleSwitch.parentElement.classList.remove('opacity-40', 'cursor-not-allowed');
-                }
+                qBtn.className = "flex-1 py-1 text-center text-xs font-bold rounded-md transition-all bg-indigo-600 text-white shadow-md";
+                eBtn.className = "flex-1 py-1 text-center text-xs font-bold rounded-md transition-all text-slate-400 hover:text-slate-200";
             }
         }
-    }
-
-    /**
-     * 要件②③④を満たす2段ヘッダー（1段目: タイトル全幅18pt、2段目: 組・番号・氏名）を生成
-     */
-    function buildHalfSheetHeaderHTML(title, isExplanation = false) {
-        const titleColorClass = isExplanation ? "text-red-700" : "text-slate-950";
-        const borderColorClass = isExplanation ? "border-red-600" : "border-black";
-        const displayTitle = isExplanation ? `${title} 【解答・解説】` : title;
-
-        return `
-            <div class="header-container w-full select-none pointer-events-none mb-2 shrink-0">
-                <!-- 1段目: タイトル（用紙の左右いっぱいまで折り返さず表示） -->
-                <div class="w-full flex items-center justify-between overflow-hidden">
-                    <h2 class="w-full font-bold tracking-wider ${titleColorClass} whitespace-nowrap overflow-hidden text-ellipsis text-left" style="font-size: ${globalTitleFontSize}pt; line-height: 1.25;">
-                        ${displayTitle}
-                    </h2>
-                </div>
-
-                <!-- 2段目: 組・番号・氏名（学年は削除） -->
-                <div class="w-full flex items-center justify-end text-xs font-medium text-slate-900 tracking-wider whitespace-nowrap pt-1 pb-0.5">
-                    <span>（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）組（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）番&nbsp;&nbsp;氏名（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）</span>
-                </div>
-                <div class="w-full border-b-2 ${borderColorClass} mt-0.5"></div>
-            </div>
-        `;
-    }
-
-    function createTwoSplitA4Page(pageNumber, title, isExplanation = false) {
-        const page = document.createElement('div');
-        page.id = `preview-page-${pageNumber}`;
-        page.dataset.pageIndex = pageNumber;
-        page.className = "a4-page bg-white text-slate-900 flex flex-col justify-between box-border shadow-2xl shrink-0";
-        page.style.width = `${A4_WIDTH_PX}px`; 
-        page.style.height = `${A4_HEIGHT_PX}px`;
-
-        const headerHtml = buildHalfSheetHeaderHTML(title, isExplanation);
-
-        page.innerHTML = `
-            <!-- 上半分 (Top Half Sheet) -->
-            <div class="half-sheet top-half flex flex-col" data-section="top" data-page-index="${pageNumber}">
-                ${headerHtml}
-                <div class="half-content relative flex-1 w-full overflow-visible"></div>
-            </div>
-
-            <!-- 中央の境界線 (Mid-page Cut Line: 線のみ) -->
-            <div class="mid-cut-line"></div>
-
-            <!-- 下半分 (Bottom Half Sheet: 同じ内容を配置) -->
-            <div class="half-sheet bottom-half flex flex-col" data-section="bottom" data-page-index="${pageNumber}">
-                ${headerHtml}
-                <div class="half-content relative flex-1 w-full overflow-visible"></div>
-            </div>
-        `;
-        return page;
     }
 
     function renderTabs() {
@@ -1854,7 +1779,7 @@
         document.getElementById('sheet-title-input').value = meta.title || "";
         document.getElementById('title-input-label').textContent = isAnswersVisible 
             ? activeEditPageIndex + "枚目解説のタイトル" 
-            : activeEditPageIndex + "枚目のタイトル";
+            : activeEditPageIndex + "枚目のヘッダータイトル";
     }
 
     function updateCurrentPageMeta(field, value) {
@@ -1874,294 +1799,254 @@
             return;
         }
 
-        if (isAnswersVisible) {
-            renderExplanationPages(targetContainer);
-        } else {
-            renderQuestionPages(targetContainer);
-        }
-    }
-
-    function renderQuestionPages(targetContainer) {
         targetContainer.innerHTML = '';
-        const borderStyle = document.getElementById('cell-border-style').value;
-        let borderClass = borderStyle === "none" ? "border-transparent" : (borderStyle === "dashed" ? "border border-dashed border-gray-300 rounded-lg" : "border border-solid border-gray-300 rounded-lg");
         const totalPages = parseInt(document.getElementById('total-pages-select').value);
+        const borderStyle = document.getElementById('cell-border-style').value;
+        const borderClass = borderStyle === "none" ? "border-transparent" : (borderStyle === "dashed" ? "border border-dashed border-gray-300 rounded-lg" : "border border-solid border-gray-300 rounded-lg");
 
         for (let p = 1; p <= totalPages; p++) {
-            const meta = pageMeta[p] || { title: predictGradeAndUnitFromQuestions().fullTitle };
-            const pageEl = createTwoSplitA4Page(p, meta.title, false);
+            const meta = pageMeta[p] || { title: "〇年小テスト　「練習問題」" };
+            const rawTitle = meta.title || "小テスト";
+            const pageTitle = isAnswersVisible ? (rawTitle + " 【解答・解説】") : rawTitle;
+
+            const pageEl = document.createElement('div');
+            pageEl.id = `preview-page-${p}`;
+            pageEl.dataset.pageIndex = p;
+            pageEl.className = "a4-page bg-white text-slate-900 box-border shadow-2xl shrink-0";
+            pageEl.style.width = `${A4_WIDTH_PX}px`; 
+            pageEl.style.height = `${A4_HEIGHT_PX}px`;
+
+            // Top Half
+            const topHalf = document.createElement('div');
+            topHalf.className = "half-sheet flex flex-col justify-start";
+            topHalf.innerHTML = `
+                <div class="relative w-full mb-2 select-none pointer-events-none shrink-0">
+                    <h2 class="w-full font-bold tracking-wider ${isAnswersVisible ? 'text-red-700' : 'text-slate-950'} leading-tight break-words text-left" style="font-size: ${globalTitleFontSize}pt;">
+                        ${pageTitle}
+                    </h2>
+                    <div class="w-full flex justify-end text-xs font-medium text-slate-900 tracking-wider whitespace-nowrap leading-none pt-1 pb-0.5">
+                        （&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）組（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）番&nbsp;&nbsp;氏名（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）
+                    </div>
+                    <div class="w-full border-b-2 ${isAnswersVisible ? 'border-red-600' : 'border-black'} mt-1"></div>
+                </div>
+                <div class="half-content flex-1 w-full relative" data-half="top"></div>
+            `;
+            pageEl.appendChild(topHalf);
+
+            // Mid-page dividing line (dashed line only)
+            const divider = document.createElement('div');
+            divider.className = "mid-cut-line";
+            pageEl.appendChild(divider);
+
+            // Bottom Half (Exact replica)
+            const bottomHalf = document.createElement('div');
+            bottomHalf.className = "half-sheet flex flex-col justify-start";
+            bottomHalf.innerHTML = `
+                <div class="relative w-full mb-2 select-none pointer-events-none shrink-0">
+                    <h2 class="w-full font-bold tracking-wider ${isAnswersVisible ? 'text-red-700' : 'text-slate-950'} leading-tight break-words text-left" style="font-size: ${globalTitleFontSize}pt;">
+                        ${pageTitle}
+                    </h2>
+                    <div class="w-full flex justify-end text-xs font-medium text-slate-900 tracking-wider whitespace-nowrap leading-none pt-1 pb-0.5">
+                        （&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）組（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）番&nbsp;&nbsp;氏名（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）
+                    </div>
+                    <div class="w-full border-b-2 ${isAnswersVisible ? 'border-red-600' : 'border-black'} mt-1"></div>
+                </div>
+                <div class="half-content flex-1 w-full relative" data-half="bottom"></div>
+            `;
+            pageEl.appendChild(bottomHalf);
+
             targetContainer.appendChild(pageEl);
 
-            const topContentArea = pageEl.querySelector('.top-half .half-content');
-            const bottomContentArea = pageEl.querySelector('.bottom-half .half-content');
-
+            // Populate both top and bottom halves with identical questions
+            const topContent = topHalf.querySelector('.half-content');
+            const bottomContent = bottomHalf.querySelector('.half-content');
             const pageQuestions = questions.filter(q => q.pageIndex === p);
+            const pageFreeImages = freeImages.filter(img => img.pageIndex === p);
 
-            // 上下両方のコンテンツエリアに同期して配置
-            [topContentArea, bottomContentArea].forEach((contentArea, sectionIdx) => {
-                const isBottomSection = sectionIdx === 1;
+            renderHalfContent(topContent, pageQuestions, pageFreeImages, isAnswersVisible, borderClass, 'top');
+            renderHalfContent(bottomContent, pageQuestions, pageFreeImages, isAnswersVisible, borderClass, 'bottom');
+        }
 
-                pageQuestions.forEach((q) => {
-                    const cell = document.createElement('div');
-                    cell.style.left = (q.x !== undefined ? q.x : 0) + "px";
-                    cell.style.top = (q.y !== undefined ? q.y : 6) + "px"; 
-                    cell.style.width = (q.width || (q.type === 'bigQ' ? 688 : 334)) + "px";
-                    cell.style.height = (q.height || (q.type === 'bigQ' ? 34 : 180)) + "px";
-                    cell.dataset.qId = q.id;
-                    cell.dataset.section = isBottomSection ? "bottom" : "top";
+        updateActiveHighlight();
 
-                    const qFontSize = q.fontSize || (q.type === 'bigQ' ? globalBigQFontSize : globalSubQFontSize);
+        renderMathInElement(targetContainer, {
+            delimiters: [{left: "$$", right: "$$", display: false}, {left: "$", right: "$", display: false}],
+            throwOnError: false
+        });
 
-                    if (q.type === 'bigQ') {
-                        cell.className = "absolute group hover:border-amber-500 hover:ring-1 hover:ring-amber-400 p-2 flex items-start justify-between bg-white text-left font-bold text-slate-900 border border-transparent z-30 select-none cursor-default overflow-hidden";
-                        cell.style.fontSize = qFontSize + "pt";
-                        
-                        const bigQLabel = '<span class="big-q-box shrink-0 select-none mr-2 mt-0.5">' + q.bigQ + '</span>';
+        adjustZoom(document.getElementById('zoom-slider').value);
+    }
 
-                        cell.innerHTML = `
-                            <div class="flex items-start pointer-events-none select-none text-left flex-1 min-w-0">
-                                ${bigQLabel}
-                                <span class="leading-relaxed select-none whitespace-pre-wrap break-words text-left flex-1">${q.text}</span>
-                            </div>
-                            <button class="absolute -top-2.5 -right-2.5 bg-rose-600 hover:bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-md opacity-0 group-hover:opacity-100 transition-opacity no-print" onclick="deleteQuestion(${q.id})">✕</button>
-                            <div class="drag-handle absolute -bottom-1 -left-1 w-5 h-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full flex items-center justify-center cursor-move text-[10px] select-none shadow-md hover:scale-110 active:scale-95 transition-transform no-print" title="ドラッグして移動（上下連動）">✥</div>
-                            <div class="resize-handle absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-indigo-600 rounded-full border-2 border-white cursor-se-resize opacity-0 group-hover:opacity-100 transition-opacity no-print" onmousedown="startResizeQuestion(event, ${q.id})" ontouchstart="startResizeQuestion(event, ${q.id})"></div>
-                        `;
-                    } else {
-                        cell.className = "absolute group hover:border-indigo-500 hover:ring-1 hover:ring-indigo-400 p-2.5 flex flex-col justify-between bg-white text-left " + borderClass + " z-30 select-none cursor-default overflow-hidden";
-                        
-                        const siblingSubQs = pageQuestions.filter(item => item.type === "subQ" && item.bigQ === q.bigQ);
-                        const hasMultipleSubQs = siblingSubQs.length > 1;
-                        const subQLabel = hasMultipleSubQs ? '<span class="font-bold text-slate-900 mr-1.5 select-none inline-block align-top">(' + q.subQ + ')</span>' : '';
-                        
-                        const rescuedEquation = autoRescueLaTeX(q.equation);
+    function renderHalfContent(container, pageQuestions, pageFreeImages, isExplanation, borderClass, halfKey) {
+        pageQuestions.forEach(q => {
+            const cell = document.createElement('div');
+            cell.style.left = (q.x || 0) + "px";
+            cell.style.top = (q.y || 6) + "px";
+            cell.style.width = (q.width || (q.type === 'bigQ' ? 688 : 334)) + "px";
+            cell.style.height = (q.height || (q.type === 'bigQ' ? 36 : 180)) + "px";
+            cell.dataset.qId = q.id;
+            cell.dataset.half = halfKey;
 
-                        let onlyAnswerBlock = "";
-                        if (showOnlyAnswer && q.answer) {
-                            onlyAnswerBlock = `
-                                <div class="w-full border-t border-dotted border-red-200 mt-1 pt-1 text-right text-[10px] text-red-500 font-bold select-none leading-none flex items-center justify-end shrink-0">
-                                    <span class="text-[8px] px-1 py-0.5 rounded border border-red-300 text-red-500 mr-1.5 font-extrabold uppercase scale-90">Ans</span>
-                                    答 : <span class="text-red-600 text-xs font-bold font-mono ml-1 inline-block">${autoRescueLaTeX(q.answer)}</span>
+            const qFontSize = q.fontSize || (q.type === 'bigQ' ? globalBigQFontSize : globalSubQFontSize);
+
+            if (q.type === 'bigQ') {
+                cell.className = "absolute group hover:border-amber-500 hover:ring-1 hover:ring-amber-400 p-1 flex items-start justify-between bg-white text-left font-bold text-slate-900 border border-transparent z-30 select-none cursor-default overflow-hidden";
+                cell.style.fontSize = qFontSize + "pt";
+                
+                const bigQLabel = '<span class="big-q-box shrink-0 select-none mr-2 mt-0.5">' + q.bigQ + '</span>';
+
+                cell.innerHTML = `
+                    <div class="flex items-start pointer-events-none select-none text-left flex-1 min-w-0">
+                        ${bigQLabel}
+                        <span class="leading-relaxed select-none whitespace-pre-wrap break-words text-left flex-1">${q.text}</span>
+                    </div>
+                    <button class="absolute -top-2 -right-2 bg-rose-600 hover:bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-md opacity-0 group-hover:opacity-100 transition-opacity no-print" onclick="deleteQuestion(${q.id})">✕</button>
+                    <div class="drag-handle absolute -bottom-1 -left-1 w-5 h-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full flex items-center justify-center cursor-move text-[10px] select-none shadow-md hover:scale-110 active:scale-95 transition-transform no-print" title="ドラッグして移動 (上下連動)">✥</div>
+                    <div class="resize-handle absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-indigo-600 rounded-full border-2 border-white cursor-se-resize opacity-0 group-hover:opacity-100 transition-opacity no-print" onmousedown="startResizeQuestion(event, ${q.id}, '${halfKey}')" ontouchstart="startResizeQuestion(event, ${q.id}, '${halfKey}')"></div>
+                `;
+            } else {
+                // subQ
+                const siblingSubQs = pageQuestions.filter(item => item.type === "subQ" && item.bigQ === q.bigQ);
+                const hasMultipleSubQs = siblingSubQs.length > 1;
+                const subQLabel = hasMultipleSubQs ? '<span class="font-bold text-slate-900 mr-1.5 select-none inline-block align-top">(' + q.subQ + ')</span>' : '';
+                const rescuedEquation = autoRescueLaTeX(q.equation);
+
+                if (isExplanation) {
+                    cell.className = "absolute group hover:border-red-500 hover:ring-1 hover:ring-red-400 p-2 flex flex-col justify-between bg-white text-left border border-solid border-red-200 rounded-lg shadow-sm z-30 select-none cursor-default overflow-hidden";
+                    
+                    let explanationBlock = '';
+                    if (q.explanation) {
+                        const cleanExplanation = parseExplanationToString(q.explanation);
+                        const expLines = cleanExplanation.split('\n');
+                        const isStepLayout = expLines.some(line => line.includes('|'));
+
+                        if (isStepLayout) {
+                            let rowsHtml = '';
+                            expLines.forEach(line => {
+                                if (!line.trim()) return;
+                                let leftEq = '';
+                                let rightText = '';
+                                if (line.includes('|')) {
+                                    const parts = line.split('|');
+                                    leftEq = parts[0].trim();
+                                    rightText = parts.slice(1).join('|').trim();
+                                } else {
+                                    rightText = line.trim();
+                                }
+                                if (leftEq && !leftEq.includes('$')) leftEq = "$" + leftEq + "$";
+
+                                rowsHtml += `
+                                    <div class="grid grid-cols-12 gap-1 py-0.5 border-b border-red-100/60 last:border-0 items-center text-left">
+                                        <div class="col-span-6 text-left text-[9px] text-slate-800 font-semibold font-mono overflow-x-auto scrollbar-none select-text whitespace-nowrap">
+                                            ${autoRescueLaTeX(leftEq)}
+                                        </div>
+                                        <div class="col-span-6 text-left text-[8.5px] text-slate-600 leading-normal font-sans select-text pl-1 border-l border-red-100/40 whitespace-pre-wrap break-words">
+                                            ${autoRescueLaTeX(rightText)}
+                                        </div>
+                                    </div>
+                                `;
+                            });
+
+                            explanationBlock = `
+                                <div class="mt-1 p-1 bg-red-50/70 border border-red-200 rounded text-[9.5px] text-slate-700 font-sans w-full box-border text-left overflow-y-auto scrollbar-none">
+                                    <div class="flex flex-col w-full text-left">
+                                        ${rowsHtml}
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            explanationBlock = `
+                                <div class="mt-1 p-1 bg-red-50/70 border border-red-100 rounded text-[9.5px] text-slate-700 leading-relaxed font-sans w-full box-border text-left overflow-y-auto scrollbar-none">
+                                    <div class="whitespace-pre-wrap break-words text-left">${autoRescueLaTeX(cleanExplanation)}</div>
                                 </div>
                             `;
                         }
-
-                        cell.innerHTML = `
-                            <div class="w-full flex flex-col items-start justify-start select-none pointer-events-none text-left flex-1 min-h-0 overflow-y-auto scrollbar-none">
-                                <div class="problem-text text-slate-900 leading-relaxed text-left whitespace-pre-wrap break-words w-full" style="font-size: ${qFontSize}pt;">${subQLabel}<span class="inline">${rescuedEquation}</span></div>
-                                ${onlyAnswerBlock}
-                            </div>
-                            <button class="absolute -top-2.5 -right-2.5 bg-rose-600 hover:bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-md opacity-0 group-hover:opacity-100 transition-opacity no-print" onclick="deleteQuestion(${q.id})">✕</button>
-                            <div class="drag-handle absolute -bottom-1 -left-1 w-5 h-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full flex items-center justify-center cursor-move text-[10px] select-none shadow-md hover:scale-110 active:scale-95 transition-transform no-print" title="ドラッグして移動（上下連動）">✥</div>
-                            <div class="resize-handle absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-indigo-600 rounded-full border-2 border-white cursor-se-resize opacity-0 group-hover:opacity-100 transition-opacity no-print" onmousedown="startResizeQuestion(event, ${q.id})" ontouchstart="startResizeQuestion(event, ${q.id})"></div>
-                        `;
                     }
 
-                    cell.addEventListener('mousedown', (e) => startDragQuestion(e, q.id, cell));
-                    cell.addEventListener('touchstart', (e) => startDragQuestion(e, q.id, cell), { passive: false });
-                    contentArea.appendChild(cell);
-                });
-
-                // フリー画像も上下両方に同期レンダリング
-                const pageFreeImages = freeImages.filter(img => img.pageIndex === p);
-                pageFreeImages.forEach(imgData => {
-                    const imgContainer = document.createElement('div');
-                    imgContainer.className = "absolute group border border-dashed border-transparent hover:border-indigo-500 transition-colors z-30 select-none cursor-default";
-                    imgContainer.style.left = imgData.x + "px";
-                    imgContainer.style.top = imgData.y + "px";
-                    imgContainer.style.width = imgData.width + "px";
-                    imgContainer.style.height = imgData.height + "px";
-                    imgContainer.dataset.id = imgData.id;
-
-                    imgContainer.innerHTML = `
-                        <img src="${imgData.base64}" class="w-full h-full object-contain pointer-events-none" />
-                        <button class="absolute -top-2.5 -right-2.5 bg-rose-600 hover:bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-md opacity-0 group-hover:opacity-100 transition-opacity no-print" onclick="deleteFreeImage(event, ${imgData.id})">✕</button>
-                        <button class="absolute -top-2.5 -left-2.5 bg-cyan-600 hover:bg-cyan-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-md opacity-0 group-hover:opacity-100 transition-opacity no-print" onclick="event.stopPropagation(); openCropModal(${imgData.id})">✂️</button>
-                        <div class="drag-handle absolute -bottom-1 -left-1 w-5 h-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full flex items-center justify-center cursor-move text-[10px] select-none shadow-md hover:scale-110 active:scale-95 transition-transform no-print" title="ドラッグして移動（上下連動）">✥</div>
-                        <div class="resize-handle absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-indigo-600 rounded-full border-2 border-white cursor-se-resize opacity-0 group-hover:opacity-100 transition-opacity no-print" onmousedown="startResizeFreeImage(event, ${imgData.id})" ontouchstart="startResizeFreeImage(event, ${imgData.id})"></div>
+                    cell.innerHTML = `
+                        <div class="w-full flex flex-col items-start justify-start select-none pointer-events-none text-left flex-1 min-h-0 overflow-y-auto scrollbar-none">
+                            <div class="text-slate-900 leading-tight text-left whitespace-pre-wrap break-words font-sans w-full" style="font-size: ${qFontSize}pt;">
+                                <span class="font-bold text-red-600">[問${q.bigQ}-${q.subQ}]</span> ${subQLabel}<span class="text-left inline">${rescuedEquation}</span>
+                            </div>
+                        </div>
+                        ${explanationBlock}
+                        <div class="mt-1 text-right text-xs font-medium pt-0.5 flex justify-end items-end w-full box-border shrink-0 select-none text-left">
+                            <span class="text-red-600 text-[10px] mb-0.5 font-bold">【答】</span>
+                            <div class="border-b border-red-400 px-2 min-w-[100px] max-w-[80%] text-left min-h-[1.2rem] flex items-end">
+                                <span class="text-red-600 font-bold ml-1">${autoRescueLaTeX(q.answer)}</span>
+                            </div>
+                        </div>
+                        <button class="absolute -top-2 -right-2 bg-rose-600 hover:bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-md opacity-0 group-hover:opacity-100 transition-opacity no-print" onclick="deleteQuestion(${q.id})">✕</button>
+                        <div class="drag-handle absolute -bottom-1 -left-1 w-5 h-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full flex items-center justify-center cursor-move text-[10px] select-none shadow-md hover:scale-110 active:scale-95 transition-transform no-print" title="ドラッグして移動 (上下連動)">✥</div>
+                        <div class="resize-handle absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-indigo-600 rounded-full border-2 border-white cursor-se-resize opacity-0 group-hover:opacity-100 transition-opacity no-print" onmousedown="startResizeQuestion(event, ${q.id}, '${halfKey}')" ontouchstart="startResizeQuestion(event, ${q.id}, '${halfKey}')"></div>
                     `;
-
-                    imgContainer.addEventListener('mousedown', (e) => startDragFreeImage(e, imgData.id, imgContainer));
-                    imgContainer.addEventListener('touchstart', (e) => startDragFreeImage(e, imgData.id, imgContainer), { passive: false });
-                    contentArea.appendChild(imgContainer);
-                });
-            });
-        }
-
-        updateActiveHighlight();
-
-        renderMathInElement(targetContainer, {
-            delimiters: [{left: "$$", right: "$$", display: false}, {left: "$", right: "$", display: false}],
-            throwOnError: false
-        });
-
-        adjustZoom(document.getElementById('zoom-slider').value);
-    }
-
-    function renderExplanationPages(targetContainer) {
-        targetContainer.innerHTML = '';
-        const totalPages = parseInt(document.getElementById('total-pages-select').value);
-
-        for (let p = 1; p <= totalPages; p++) {
-            const meta = pageMeta[p] || { title: predictGradeAndUnitFromQuestions().fullTitle };
-            const pageEl = createTwoSplitA4Page(p, meta.title, true);
-            targetContainer.appendChild(pageEl);
-
-            const topContentArea = pageEl.querySelector('.top-half .half-content');
-            const bottomContentArea = pageEl.querySelector('.bottom-half .half-content');
-
-            const pageQuestions = questions.filter(q => (q.exp_pageIndex || q.pageIndex) === p);
-
-            [topContentArea, bottomContentArea].forEach((contentArea) => {
-                pageQuestions.forEach((q) => {
-                    const cell = document.createElement('div');
-                    cell.style.left = (q.exp_x !== undefined ? q.exp_x : (q.x !== undefined ? q.x : 0)) + "px";
-                    cell.style.top = (q.exp_y !== undefined ? q.exp_y : (q.y !== undefined ? q.y : 6)) + "px"; 
-                    cell.style.width = (q.exp_width || q.width || (q.type === 'bigQ' ? 688 : 334)) + "px";
-                    cell.style.height = (q.exp_height || q.height || (q.type === 'bigQ' ? 34 : 180)) + "px";
-                    cell.dataset.qId = q.id;
-
-                    const qFontSize = q.fontSize || (q.type === 'bigQ' ? globalBigQFontSize : globalSubQFontSize);
-
-                    if (q.type === 'bigQ') {
-                        cell.className = "absolute group hover:border-amber-500 hover:ring-1 hover:ring-amber-400 p-2 flex items-start justify-between bg-white text-left font-bold text-slate-900 border border-transparent z-30 select-none cursor-default overflow-hidden";
-                        cell.style.fontSize = qFontSize + "pt";
-                        
-                        const bigQLabel = '<span class="big-q-box shrink-0 select-none mr-2 mt-0.5">' + q.bigQ + '</span>';
-
-                        cell.innerHTML = `
-                            <div class="flex items-start pointer-events-none select-none text-left flex-1 min-w-0">
-                                ${bigQLabel}
-                                <span class="leading-relaxed select-none whitespace-pre-wrap break-words text-left flex-1">${q.text}</span>
+                } else {
+                    // Question print
+                    cell.className = "absolute group hover:border-indigo-500 hover:ring-1 hover:ring-indigo-400 p-2 flex flex-col justify-between bg-white text-left " + borderClass + " z-30 select-none cursor-default overflow-hidden";
+                    
+                    let onlyAnswerBlock = "";
+                    if (showOnlyAnswer && q.answer) {
+                        onlyAnswerBlock = `
+                            <div class="w-full border-t border-dotted border-red-200 mt-1 pt-1 text-right text-[10px] text-red-500 font-bold select-none leading-none flex items-center justify-end shrink-0">
+                                <span class="text-[8px] px-1 py-0.5 rounded border border-red-300 text-red-500 mr-1.5 font-extrabold uppercase scale-90">Ans</span>
+                                答 : <span class="text-red-600 text-xs font-bold font-mono ml-1 inline-block">${autoRescueLaTeX(q.answer)}</span>
                             </div>
-                            <button class="absolute -top-2.5 -right-2.5 bg-rose-600 hover:bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-md opacity-0 group-hover:opacity-100 transition-opacity no-print" onclick="deleteQuestion(${q.id})">✕</button>
-                            <div class="drag-handle absolute -bottom-1 -left-1 w-5 h-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full flex items-center justify-center cursor-move text-[10px] select-none shadow-md hover:scale-110 active:scale-95 transition-transform no-print" title="ドラッグして移動（上下連動）">✥</div>
-                            <div class="resize-handle absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-indigo-600 rounded-full border-2 border-white cursor-se-resize opacity-0 group-hover:opacity-100 transition-opacity no-print" onmousedown="startResizeQuestion(event, ${q.id})" ontouchstart="startResizeQuestion(event, ${q.id})"></div>
-                        `;
-                    } else {
-                        cell.className = "absolute group hover:border-red-500 hover:ring-1 hover:ring-red-400 p-2 flex flex-col justify-between bg-white text-left border border-solid border-red-200 rounded-lg shadow-sm z-30 select-none cursor-default overflow-hidden";
-                        
-                        const siblingSubQs = pageQuestions.filter(item => item.type === "subQ" && item.bigQ === q.bigQ);
-                        const hasMultipleSubQs = siblingSubQs.length > 1;
-                        const subQLabel = hasMultipleSubQs ? '<span class="font-bold text-slate-900 mr-1.5 select-none inline-block align-top">(' + q.subQ + ')</span>' : '';
-                        
-                        const rescuedEquation = autoRescueLaTeX(q.equation);
-                        const answerValue = '<span class="text-red-600 font-bold ml-1">' + autoRescueLaTeX(q.answer) + '</span>';
-                        
-                        let explanationBlock = '';
-                        if (q.explanation) {
-                            const cleanExplanation = parseExplanationToString(q.explanation);
-                            const expLines = cleanExplanation.split('\n');
-                            const isStepLayout = expLines.some(line => line.includes('|'));
-
-                            if (isStepLayout) {
-                                let rowsHtml = '';
-                                expLines.forEach(line => {
-                                    if (!line.trim()) return;
-                                    let leftEq = '';
-                                    let rightText = '';
-                                    
-                                    if (line.includes('|')) {
-                                        const parts = line.split('|');
-                                        leftEq = parts[0].trim();
-                                        rightText = parts.slice(1).join('|').trim();
-                                    } else {
-                                        rightText = line.trim();
-                                    }
-
-                                    if (leftEq && !leftEq.includes('$')) {
-                                        leftEq = "$" + leftEq + "$";
-                                    }
-
-                                    rowsHtml += `
-                                        <div class="grid grid-cols-12 gap-1 py-0.5 border-b border-red-100/60 last:border-0 items-center text-left">
-                                            <div class="col-span-5 text-left text-[9px] text-slate-800 font-semibold font-mono overflow-x-auto scrollbar-none select-text whitespace-nowrap">
-                                                ${autoRescueLaTeX(leftEq)}
-                                            </div>
-                                            <div class="col-span-7 text-left text-[8.5px] text-slate-600 leading-normal select-text pl-1 border-l border-red-100/40 whitespace-pre-wrap break-words">
-                                                ${autoRescueLaTeX(rightText)}
-                                            </div>
-                                        </div>
-                                    `;
-                                });
-
-                                explanationBlock = `
-                                    <div class="mt-1 p-1 bg-red-50/70 border border-red-200 rounded text-[9px] text-slate-700 w-full box-border text-left overflow-y-auto scrollbar-none">
-                                        <div class="flex flex-col w-full text-left">
-                                            ${rowsHtml}
-                                        </div>
-                                    </div>
-                                `;
-                            } else {
-                                explanationBlock = `
-                                    <div class="mt-1 p-1 bg-red-50/70 border border-red-100 rounded text-[9px] text-slate-700 leading-relaxed w-full box-border text-left overflow-y-auto scrollbar-none">
-                                        <div class="whitespace-pre-wrap break-words text-left">${autoRescueLaTeX(cleanExplanation)}</div>
-                                    </div>
-                                `;
-                            }
-                        }
-
-                        cell.innerHTML = `
-                            <div class="w-full flex flex-col items-start justify-start select-none pointer-events-none text-left flex-1 min-h-0 overflow-y-auto scrollbar-none">
-                                <div class="text-slate-900 leading-tight text-left whitespace-pre-wrap break-words w-full" style="font-size: ${qFontSize}pt;">
-                                    <span class="font-bold text-red-600">[問${q.bigQ}-${q.subQ}]</span> ${subQLabel}<span class="text-left inline">${rescuedEquation}</span>
-                                </div>
-                            </div>
-                            ${explanationBlock}
-                            <div class="mt-0.5 text-right text-xs font-medium pt-0.5 flex justify-end items-end w-full box-border shrink-0 select-none text-left">
-                                <span class="text-red-600 text-[10px] mb-0.5 font-bold">【答】</span>
-                                <div class="border-b border-red-400 px-2 min-w-[90px] max-w-[80%] text-left min-h-[1.1rem] flex items-end">${answerValue}</div>
-                            </div>
-                            
-                            <button class="absolute -top-2.5 -right-2.5 bg-rose-600 hover:bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-md opacity-0 group-hover:opacity-100 transition-opacity no-print" onclick="deleteQuestion(${q.id})">✕</button>
-                            <div class="drag-handle absolute -bottom-1 -left-1 w-5 h-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full flex items-center justify-center cursor-move text-[10px] select-none shadow-md hover:scale-110 active:scale-95 transition-transform no-print" title="ドラッグして移動（上下連動）">✥</div>
-                            <div class="resize-handle absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-indigo-600 rounded-full border-2 border-white cursor-se-resize opacity-0 group-hover:opacity-100 transition-opacity no-print" onmousedown="startResizeQuestion(event, ${q.id})" ontouchstart="startResizeQuestion(event, ${q.id})"></div>
                         `;
                     }
 
-                    cell.addEventListener('mousedown', (e) => startDragQuestion(e, q.id, cell));
-                    cell.addEventListener('touchstart', (e) => startDragQuestion(e, q.id, cell), { passive: false });
-                    contentArea.appendChild(cell);
-                });
-            });
-        }
+                    cell.innerHTML = `
+                        <div class="w-full flex flex-col items-start justify-start select-none pointer-events-none text-left flex-1 min-h-0 overflow-y-auto scrollbar-none">
+                            <div class="problem-text text-slate-900 leading-relaxed text-left whitespace-pre-wrap break-words w-full" style="font-size: ${qFontSize}pt;">${subQLabel}<span class="inline">${rescuedEquation}</span></div>
+                            ${onlyAnswerBlock}
+                        </div>
+                        <button class="absolute -top-2 -right-2 bg-rose-600 hover:bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-md opacity-0 group-hover:opacity-100 transition-opacity no-print" onclick="deleteQuestion(${q.id})">✕</button>
+                        <div class="drag-handle absolute -bottom-1 -left-1 w-5 h-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full flex items-center justify-center cursor-move text-[10px] select-none shadow-md hover:scale-110 active:scale-95 transition-transform no-print" title="ドラッグして移動 (上下連動)">✥</div>
+                        <div class="resize-handle absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-indigo-600 rounded-full border-2 border-white cursor-se-resize opacity-0 group-hover:opacity-100 transition-opacity no-print" onmousedown="startResizeQuestion(event, ${q.id}, '${halfKey}')" ontouchstart="startResizeQuestion(event, ${q.id}, '${halfKey}')"></div>
+                    `;
+                }
+            }
 
-        updateActiveHighlight();
-
-        renderMathInElement(targetContainer, {
-            delimiters: [{left: "$$", right: "$$", display: false}, {left: "$", right: "$", display: false}],
-            throwOnError: false
+            cell.addEventListener('mousedown', (e) => startDragQuestion(e, q.id, cell, halfKey));
+            cell.addEventListener('touchstart', (e) => startDragQuestion(e, q.id, cell, halfKey), { passive: false });
+            container.appendChild(cell);
         });
 
-        adjustZoom(document.getElementById('zoom-slider').value);
-    }
+        pageFreeImages.forEach(imgData => {
+            const imgContainer = document.createElement('div');
+            imgContainer.className = "absolute group border border-dashed border-transparent hover:border-indigo-500 transition-colors z-30 select-none cursor-default";
+            imgContainer.style.left = (imgData.x || 0) + "px";
+            imgContainer.style.top = (imgData.y || 0) + "px";
+            imgContainer.style.width = (imgData.width || 120) + "px";
+            imgContainer.style.height = (imgData.height || 120) + "px";
+            imgContainer.dataset.id = imgData.id;
+            imgContainer.dataset.half = halfKey;
 
-    function getPrintTitle() {
-        let baseTitle = (pageMeta[1] && pageMeta[1].title) ? pageMeta[1].title : "数学_小テスト";
-        baseTitle = baseTitle.replace(/[\s　]+/g, '_').replace(/[「」]/g, '');
-        
-        if (isAnswersVisible) {
-            return baseTitle + "_解説";
-        } else if (showOnlyAnswer) {
-            return baseTitle + "_答え";
-        } else {
-            return baseTitle + "_問題";
-        }
+            imgContainer.innerHTML = `
+                <img src="${imgData.base64}" class="w-full h-full object-contain pointer-events-none" />
+                <button class="absolute -top-2 -right-2 bg-rose-600 hover:bg-rose-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-md opacity-0 group-hover:opacity-100 transition-opacity no-print" onclick="deleteFreeImage(event, ${imgData.id})">✕</button>
+                <button class="absolute -top-2 -left-2 bg-cyan-600 hover:bg-cyan-500 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shadow-md opacity-0 group-hover:opacity-100 transition-opacity no-print" onclick="event.stopPropagation(); openCropModal(${imgData.id})">✂️</button>
+                <div class="drag-handle absolute -bottom-1 -left-1 w-5 h-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full flex items-center justify-center cursor-move text-[10px] select-none shadow-md hover:scale-110 active:scale-95 transition-transform no-print" title="ドラッグして移動 (上下連動)">✥</div>
+                <div class="resize-handle absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-indigo-600 rounded-full border-2 border-white cursor-se-resize opacity-0 group-hover:opacity-100 transition-opacity no-print" onmousedown="startResizeFreeImage(event, ${imgData.id}, '${halfKey}')" ontouchstart="startResizeFreeImage(event, ${imgData.id}, '${halfKey}')"></div>
+            `;
+
+            imgContainer.addEventListener('mousedown', (e) => startDragFreeImage(e, imgData.id, imgContainer, halfKey));
+            imgContainer.addEventListener('touchstart', (e) => startDragFreeImage(e, imgData.id, imgContainer, halfKey), { passive: false });
+            container.appendChild(imgContainer);
+        });
     }
 
     function triggerNativePrint() {
         clearSelection();
-
         const originalZoom = currentZoom;
         adjustZoom(100);
 
         const originalTitle = document.title;
-        const dynamicPDFName = getPrintTitle();
-        document.title = dynamicPDFName;
+        let baseTitle = (pageMeta[1] && pageMeta[1].title) ? pageMeta[1].title : "数学_小テスト";
+        baseTitle = baseTitle.replace(/[\s　]+/g, '_').replace(/[\\/:*?"<>|]/g, '');
+        document.title = isAnswersVisible ? (baseTitle + "_解答解説") : (baseTitle + "_問題");
 
         setTimeout(() => {
             window.print();
-
             setTimeout(() => {
                 document.title = originalTitle;
                 adjustZoom(originalZoom);
@@ -2191,8 +2076,8 @@
             card.addEventListener('click', (e) => {
                 if (e.target.tagName.toLowerCase() === 'input' || 
                     e.target.tagName.toLowerCase() === 'textarea' || 
-                    e.target.tagName.toLowerCase() === 'select' ||
-                    e.target.tagName.toLowerCase() === 'button' ||
+                    e.target.tagName.toLowerCase() === 'select' || 
+                    e.target.tagName.toLowerCase() === 'button' || 
                     e.target.closest('button')) {
                     return;
                 }
@@ -2200,7 +2085,6 @@
             });
 
             const currentP = q.pageIndex || 1;
-            
             let pageSelectOptions = '';
             for (let pIdx = 1; pIdx <= Math.max(totalPages, currentP); pIdx++) {
                 pageSelectOptions += `<option value="${pIdx}" ${pIdx === currentP ? 'selected' : ''}>${pIdx}P</option>`;
@@ -2209,11 +2093,9 @@
             let pageControls = `
                 <div class="flex items-center space-x-1 bg-slate-950/80 px-2 py-1 rounded-lg border border-slate-800 shrink-0">
                     <button onclick="event.stopPropagation(); moveQuestionPageDelta(${q.id}, -1)" ${currentP <= 1 ? 'disabled class="text-[9px] bg-slate-900 text-slate-600 px-1.5 py-0.5 rounded border border-slate-800 cursor-not-allowed"' : 'class="text-[9px] bg-slate-800 hover:bg-slate-700 text-indigo-300 px-1.5 py-0.5 rounded font-bold border border-slate-700 transition"'} title="前のページへ移動">◀ 前P</button>
-                    
                     <select onchange="event.stopPropagation(); moveQuestionToPage(${q.id}, this.value)" class="bg-slate-900 text-indigo-300 border border-slate-700 font-bold text-[10px] rounded px-1 py-0.5 focus:outline-none">
                         ${pageSelectOptions}
                     </select>
-
                     <button onclick="event.stopPropagation(); moveQuestionPageDelta(${q.id}, 1)" class="text-[9px] bg-slate-800 hover:bg-slate-700 text-indigo-300 px-1.5 py-0.5 rounded font-bold border border-slate-700 transition" title="次のページへ移動">次P ▶</button>
                 </div>
             `;
@@ -2232,8 +2114,8 @@
                     
                     <div class="space-y-1.5">
                         <div>
-                            <label class="block text-[9px] text-slate-400 mb-0.5">指示文</label>
-                            <input type="text" value="${q.text}" oninput="updateQuestionData(${q.id}, 'text', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-[11px] focus:outline-none focus:border-indigo-500 text-slate-100">
+                            <label class="block text-[9px] text-slate-400 mb-0.5">指示文・タイトル</label>
+                            <input type="text" value="${q.text}" oninput="updateQuestionData(${q.id}, 'text', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-[11px] focus:outline-none focus:border-indigo-500 text-slate-100 font-bold">
                         </div>
                         
                         <div class="grid grid-cols-2 gap-2 pt-1">
@@ -2271,16 +2153,16 @@
                     
                     <div class="space-y-1.5">
                         <div>
-                            <label class="block text-[9px] text-slate-400 mb-0.5">問題文 (LaTeX)</label>
-                            <textarea oninput="updateQuestionData(${q.id}, 'equation', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-[11px] h-16 focus:outline-none focus:border-indigo-500 font-mono text-slate-100">${q.equation}</textarea>
+                            <label class="block text-[9px] text-slate-400 mb-0.5">問題文 (LaTeX対応)</label>
+                            <textarea oninput="updateQuestionData(${q.id}, 'equation', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-[11px] h-14 focus:outline-none focus:border-indigo-500 font-mono text-slate-100">${q.equation}</textarea>
                         </div>
                         <div>
-                            <label class="block text-[9px] text-slate-400 mb-0.5">解答 (LaTeX)</label>
+                            <label class="block text-[9px] text-slate-400 mb-0.5">解答 (LaTeX対応)</label>
                             <input type="text" value="${q.answer.replace(/"/g, '&quot;')}" oninput="updateQuestionData(${q.id}, 'answer', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-[11px] font-mono focus:outline-none focus:border-indigo-500 text-slate-100">
                         </div>
                         <div>
-                            <label class="block text-[9px] text-slate-400 mb-0.5">解説 (「数式 | 説明」)</label>
-                            <textarea oninput="updateQuestionData(${q.id}, 'explanation', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-[11px] h-16 focus:outline-none focus:border-indigo-500 text-slate-100" placeholder="数式 | 日本語の操作説明">${q.explanation || ''}</textarea>
+                            <label class="block text-[9px] text-slate-400 mb-0.5">解説 (LaTeX・左右「|」行分割対応)</label>
+                            <textarea oninput="updateQuestionData(${q.id}, 'explanation', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded px-2 py-1 text-[11px] h-16 focus:outline-none focus:border-indigo-500 font-sans text-slate-100" placeholder="数式 | 日本語の操作説明">${q.explanation || ''}</textarea>
                         </div>
 
                         <div class="grid grid-cols-2 gap-2 pt-1 border-t border-slate-800/60 mt-1">
@@ -2289,7 +2171,7 @@
                                 <input type="number" value="${q.bigQ}" oninput="updateQuestionData(${q.id}, 'bigQ', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded py-0.5 px-1.5 text-[10px] text-slate-300 focus:outline-none focus:border-indigo-500 font-mono text-center">
                             </div>
                             <div>
-                                <label class="block text-[8px] text-slate-500 mb-0.5">小問番号 (自動連番)</label>
+                                <label class="block text-[8px] text-slate-500 mb-0.5">小問番号 (※自動連番)</label>
                                 <input type="number" value="${q.subQ}" oninput="updateQuestionData(${q.id}, 'subQ', this.value)" class="w-full bg-slate-950 border border-slate-800 rounded py-0.5 px-1.5 text-[10px] text-slate-300 focus:outline-none focus:border-indigo-500 font-mono text-center" disabled>
                             </div>
                         </div>
@@ -2298,45 +2180,6 @@
             }
             listContainer.appendChild(card);
         });
-    }
-
-    function moveQuestionToPage(id, targetPage) {
-        const q = questions.find(item => item.id === id);
-        if (!q) return;
-
-        targetPage = parseInt(targetPage);
-        const totalPages = parseInt(document.getElementById('total-pages-select').value);
-
-        if (targetPage < 1) targetPage = 1;
-        if (targetPage > totalPages) {
-            changeTotalPages(targetPage);
-        }
-
-        const oldPage = q.pageIndex;
-        q.pageIndex = targetPage;
-        q.forcePageBreak = false;
-
-        if (q.type === 'bigQ') {
-            const childSubs = questions.filter(item => item.type === 'subQ' && item.bigQ === q.bigQ && item.pageIndex === oldPage);
-            childSubs.forEach(child => {
-                child.pageIndex = targetPage;
-            });
-        }
-
-        reorderAndReflowQuestions();
-        markAsModified();
-        renderFormList();
-        renderTabs();
-        updatePreview();
-
-        showNotification(`📄 ${targetPage} ページ目へ移動しました！`);
-    }
-
-    function moveQuestionPageDelta(id, delta) {
-        const q = questions.find(item => item.id === id);
-        if (!q) return;
-        const currentP = q.pageIndex || 1;
-        moveQuestionToPage(id, currentP + delta);
     }
 
     function focusFromForm(qId) {
@@ -2382,10 +2225,7 @@
         }
     }
 
-    /**
-     * 上下のどちらでドラッグしても、半券内ローカル座標(x, y)を更新し上下を同時同期移動させる
-     */
-    function startDragQuestion(e, id, container) {
+    function startDragQuestion(e, id, container, halfKey) {
         const activeEl = document.activeElement;
         if (activeEl && (activeEl.tagName.toLowerCase() === 'input' || activeEl.tagName.toLowerCase() === 'textarea')) {
             activeEl.blur();
@@ -2407,46 +2247,38 @@
         const qData = questions.find(q => q.id === id);
         if (!qData) return;
 
-        const xKey = isAnswersVisible ? 'exp_x' : 'x';
-        const yKey = isAnswersVisible ? 'exp_y' : 'y';
-        const wKey = isAnswersVisible ? 'exp_width' : 'width';
-        const hKey = isAnswersVisible ? 'exp_height' : 'height';
-
         const isTouch = e.type.startsWith('touch');
         const startClientX = isTouch ? e.touches[0].clientX : e.clientX;
         const startClientY = isTouch ? e.touches[0].clientY : e.clientY;
 
-        const startLocalX = qData[xKey] !== undefined ? qData[xKey] : 0;
-        const startLocalY = qData[yKey] !== undefined ? qData[yKey] : 6;
+        const startLocalX = qData.x || 0;
+        const startLocalY = qData.y || 0;
 
-        // 両方の半券の対応要素を取得して同時にスタイル追従
-        const allTwinCells = document.querySelectorAll(`[data-q-id="${id}"]`);
+        const previewScaleWrapper = document.getElementById('preview-scale-wrapper');
+        const wrapperRect = previewScaleWrapper.getBoundingClientRect();
+        const currentScale = wrapperRect.width / A4_WIDTH_PX;
 
         function onMouseMove(moveEvent) {
             if (activeDragQuestionId !== id) return;
             moveEvent.preventDefault();
 
-            const currentClientX = isTouch ? moveEvent.touches[0].clientX : moveEvent.clientX;
-            const currentClientY = isTouch ? moveEvent.touches[0].clientY : moveEvent.clientY;
+            const curX = isTouch ? moveEvent.touches[0].clientX : moveEvent.clientX;
+            const curY = isTouch ? moveEvent.touches[0].clientY : moveEvent.clientY;
 
-            // スケール考慮での増分計算
-            const scaleFactor = (document.getElementById('zoom-slider').value / 100);
-            const dx = (currentClientX - startClientX) / scaleFactor;
-            const dy = (currentClientY - startClientY) / scaleFactor;
+            const dx = (curX - startClientX) / currentScale;
+            const dy = (curY - startClientY) / currentScale;
 
-            let newX = Math.round(startLocalX + dx);
-            let newY = Math.round(startLocalY + dy);
+            const newX = Math.round(Math.max(0, Math.min(688 - qData.width, startLocalX + dx)));
+            const newY = Math.round(Math.max(0, Math.min(430 - qData.height, startLocalY + dy)));
 
-            // 半券コンテンツエリア（幅688px、高さ約450px）内に制限
-            newX = Math.max(0, Math.min(688 - (qData[wKey] || 334), newX));
-            newY = Math.max(0, Math.min(450 - (qData[hKey] || 60), newY));
+            qData.x = newX;
+            qData.y = newY;
 
-            qData[xKey] = newX;
-            qData[yKey] = newY;
-
-            allTwinCells.forEach(cell => {
-                cell.style.left = newX + "px";
-                cell.style.top = newY + "px";
+            // Update both top and bottom synchronized elements in real-time
+            const matchedEls = document.querySelectorAll(`[data-q-id="${id}"]`);
+            matchedEls.forEach(el => {
+                el.style.left = newX + "px";
+                el.style.top = newY + "px";
             });
         }
 
@@ -2454,8 +2286,6 @@
             activeDragQuestionId = null;
             markAsModified();
             updatePreview();
-            renderFormList();
-
             document.removeEventListener(isTouch ? 'touchmove' : 'mousemove', onMouseMove);
             document.removeEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp);
         }
@@ -2464,7 +2294,7 @@
         document.addEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp);
     }
 
-    function startResizeQuestion(e, id) {
+    function startResizeQuestion(e, id, halfKey) {
         e.stopPropagation();
         e.preventDefault();
 
@@ -2472,42 +2302,37 @@
         const qData = questions.find(q => q.id === id);
         if (!qData) return;
 
-        const xKey = isAnswersVisible ? 'exp_x' : 'x';
-        const yKey = isAnswersVisible ? 'exp_y' : 'y';
-        const wKey = isAnswersVisible ? 'exp_width' : 'width';
-        const hKey = isAnswersVisible ? 'exp_height' : 'height';
-
         const isTouch = e.type.startsWith('touch');
         const startClientX = isTouch ? e.touches[0].clientX : e.clientX;
         const startClientY = isTouch ? e.touches[0].clientY : e.clientY;
-        const startWidth = qData[wKey] || 334;
-        const startHeight = qData[hKey] || 180;
+        const startWidth = qData.width || 334;
+        const startHeight = qData.height || 180;
 
-        const scaleFactor = (document.getElementById('zoom-slider').value / 100);
-        const allTwinCells = document.querySelectorAll(`[data-q-id="${id}"]`);
+        const previewScaleWrapper = document.getElementById('preview-scale-wrapper');
+        const wrapperRect = previewScaleWrapper.getBoundingClientRect();
+        const currentScale = wrapperRect.width / A4_WIDTH_PX;
 
         function onMouseMove(moveEvent) {
             if (activeResizeQuestionId !== id) return;
             moveEvent.preventDefault();
 
-            const currentClientX = isTouch ? moveEvent.touches[0].clientX : moveEvent.clientX;
-            const currentClientY = isTouch ? moveEvent.touches[0].clientY : moveEvent.clientY;
+            const curX = isTouch ? moveEvent.touches[0].clientX : moveEvent.clientX;
+            const curY = isTouch ? moveEvent.touches[0].clientY : moveEvent.clientY;
 
-            const dx = (currentClientX - startClientX) / scaleFactor;
-            const dy = (currentClientY - startClientY) / scaleFactor;
+            const dx = (curX - startClientX) / currentScale;
+            const dy = (curY - startClientY) / currentScale;
 
-            let newWidth = startWidth + dx;
-            let newHeight = startHeight + dy;
+            let newWidth = Math.round(Math.max(100, Math.min(688 - (qData.x || 0), startWidth + dx)));
+            let newHeight = Math.round(Math.max(30, Math.min(430 - (qData.y || 0), startHeight + dy)));
 
-            newWidth = Math.max(100, Math.min(688 - (qData[xKey] || 0), newWidth)); 
-            newHeight = Math.max(28, Math.min(450 - (qData[yKey] || 6), newHeight)); 
+            qData.width = newWidth;
+            qData.height = newHeight;
 
-            qData[wKey] = Math.round(newWidth);
-            qData[hKey] = Math.round(newHeight);
-
-            allTwinCells.forEach(cell => {
-                cell.style.width = qData[wKey] + "px";
-                cell.style.height = qData[hKey] + "px";
+            // Sync both halves
+            const matchedEls = document.querySelectorAll(`[data-q-id="${id}"]`);
+            matchedEls.forEach(el => {
+                el.style.width = newWidth + "px";
+                el.style.height = newHeight + "px";
             });
         }
 
@@ -2567,7 +2392,7 @@
     async function pasteFromClipboard() {
         try {
             if (!navigator.clipboard || !navigator.clipboard.read) {
-                showNotification("お使いのブラウザでは直接貼り付けが未サポートです。", "error");
+                showNotification("お使いの環境では直接貼り付けボタンが未サポートです。", "error");
                 return;
             }
 
@@ -2598,15 +2423,15 @@
         const img = new Image();
         img.onload = function() {
             const aspect = img.width / img.height;
-            const initWidth = 160;
+            const initWidth = 140;
             const initHeight = initWidth / aspect;
 
             const newFreeImg = {
                 id: Date.now(),
                 pageIndex: activeEditPageIndex,
                 base64: base64Source,
-                x: (A4_WIDTH_PX - initWidth) / 2,
-                y: Math.max(60, (480 - initHeight) / 2), 
+                x: (688 - initWidth) / 2,
+                y: Math.max(10, (430 - initHeight) / 2), 
                 width: initWidth,
                 height: initHeight,
                 aspect: aspect
@@ -2630,7 +2455,7 @@
         showNotification("フリー画像を削除しました。", "error");
     }
 
-    function startDragFreeImage(e, id, container) {
+    function startDragFreeImage(e, id, container, halfKey) {
         const activeEl = document.activeElement;
         if (activeEl && (activeEl.tagName.toLowerCase() === 'input' || activeEl.tagName.toLowerCase() === 'textarea')) {
             activeEl.blur();
@@ -2656,27 +2481,33 @@
         const startClientX = isTouch ? e.touches[0].clientX : e.clientX;
         const startClientY = isTouch ? e.touches[0].clientY : e.clientY;
 
-        const startX = imgData.x;
-        const startY = imgData.y;
-        const scaleFactor = (document.getElementById('zoom-slider').value / 100);
-        const allTwinImages = document.querySelectorAll(`[data-id="${id}"]`);
+        const startLocalX = imgData.x || 0;
+        const startLocalY = imgData.y || 0;
+
+        const previewScaleWrapper = document.getElementById('preview-scale-wrapper');
+        const wrapperRect = previewScaleWrapper.getBoundingClientRect();
+        const currentScale = wrapperRect.width / A4_WIDTH_PX;
 
         function onMouseMove(moveEvent) {
             if (activeDragImgId !== id) return;
             moveEvent.preventDefault();
 
-            const currentClientX = isTouch ? moveEvent.touches[0].clientX : moveEvent.clientX;
-            const currentClientY = isTouch ? moveEvent.touches[0].clientY : moveEvent.clientY;
+            const curX = isTouch ? moveEvent.touches[0].clientX : moveEvent.clientX;
+            const curY = isTouch ? moveEvent.touches[0].clientY : moveEvent.clientY;
 
-            const dx = (currentClientX - startClientX) / scaleFactor;
-            const dy = (currentClientY - startClientY) / scaleFactor;
+            const dx = (curX - startClientX) / currentScale;
+            const dy = (curY - startClientY) / currentScale;
 
-            imgData.x = Math.round(Math.max(0, Math.min(A4_WIDTH_PX - imgData.width, startX + dx)));
-            imgData.y = Math.round(Math.max(0, Math.min(480 - imgData.height, startY + dy)));
+            const newX = Math.round(Math.max(0, Math.min(688 - imgData.width, startLocalX + dx)));
+            const newY = Math.round(Math.max(0, Math.min(430 - imgData.height, startLocalY + dy)));
 
-            allTwinImages.forEach(imgEl => {
-                imgEl.style.left = imgData.x + "px";
-                imgEl.style.top = imgData.y + "px";
+            imgData.x = newX;
+            imgData.y = newY;
+
+            const matchedEls = document.querySelectorAll(`[data-id="${id}"]`);
+            matchedEls.forEach(el => {
+                el.style.left = newX + "px";
+                el.style.top = newY + "px";
             });
         }
 
@@ -2692,7 +2523,7 @@
         document.addEventListener(isTouch ? 'touchend' : 'mouseup', onMouseUp);
     }
 
-    function startResizeFreeImage(e, id) {
+    function startResizeFreeImage(e, id, halfKey) {
         e.stopPropagation();
         e.preventDefault();
 
@@ -2703,31 +2534,33 @@
         const isTouch = e.type.startsWith('touch');
         const startClientX = isTouch ? e.touches[0].clientX : e.clientX;
         const startWidth = imgData.width;
-        const scaleFactor = (document.getElementById('zoom-slider').value / 100);
-        const allTwinImages = document.querySelectorAll(`[data-id="${id}"]`);
+
+        const previewScaleWrapper = document.getElementById('preview-scale-wrapper');
+        const wrapperRect = previewScaleWrapper.getBoundingClientRect();
+        const currentScale = wrapperRect.width / A4_WIDTH_PX;
 
         function onMouseMove(moveEvent) {
             if (activeResizeImgId !== id) return;
             moveEvent.preventDefault();
 
-            const currentClientX = isTouch ? moveEvent.touches[0].clientX : moveEvent.clientX;
-            const dx = (currentClientX - startClientX) / scaleFactor;
+            const curX = isTouch ? moveEvent.touches[0].clientX : moveEvent.clientX;
+            const dx = (curX - startClientX) / currentScale;
 
-            let newWidth = startWidth + dx;
-            newWidth = Math.max(30, Math.min(A4_WIDTH_PX - imgData.x, newWidth));
+            let newWidth = Math.max(30, Math.min(688 - imgData.x, startWidth + dx));
             let newHeight = newWidth / imgData.aspect;
 
-            if (imgData.y + newHeight > 480) {
-                newHeight = 480 - imgData.y;
+            if (imgData.y + newHeight > 430) {
+                newHeight = 430 - imgData.y;
                 newWidth = newHeight * imgData.aspect;
             }
 
             imgData.width = Math.round(newWidth);
             imgData.height = Math.round(newHeight);
 
-            allTwinImages.forEach(imgEl => {
-                imgEl.style.width = imgData.width + "px";
-                imgEl.style.height = imgData.height + "px";
+            const matchedEls = document.querySelectorAll(`[data-id="${id}"]`);
+            matchedEls.forEach(el => {
+                el.style.width = imgData.width + "px";
+                el.style.height = imgData.height + "px";
             });
         }
 
@@ -2876,8 +2709,13 @@
         const targetImg = document.getElementById('crop-target-img');
         if (!targetImg) return;
 
-        const scaleX = targetImg.naturalWidth / targetImg.clientWidth;
-        const scaleY = targetImg.naturalHeight / targetImg.clientHeight;
+        const naturalW = targetImg.naturalWidth;
+        const naturalH = targetImg.naturalHeight;
+        const renderedW = targetImg.clientWidth;
+        const renderedH = targetImg.clientHeight;
+
+        const scaleX = naturalW / renderedW;
+        const scaleY = naturalH / renderedH;
 
         const cropX = cropBoxState.x * scaleX;
         const cropY = cropBoxState.y * scaleY;
@@ -2905,7 +2743,7 @@
             markAsModified();
             updatePreview();
             closeCropModal();
-            showNotification("✂️ 画像の切り抜きが完了しました！");
+            showNotification("✂️ 画像の切り抜き（トリミング）が完了しました！");
         };
         rawImg.src = imgData.base64;
     }
@@ -2914,8 +2752,8 @@
         const totalNum = parseInt(total);
         for (let i = 1; i <= totalNum; i++) {
             if (!pageMeta[i]) {
-                const info = predictGradeAndUnitFromQuestions();
-                pageMeta[i] = { title: info.fullTitle };
+                const autoTitle = predictGradeAndUnitFromQuestions();
+                pageMeta[i] = { title: autoTitle };
             }
         }
         if (activeEditPageIndex > totalNum) activeEditPageIndex = totalNum;
@@ -2929,7 +2767,7 @@
 
     function changeAllFontSize(type, delta) {
         if (type === 'title') {
-            globalTitleFontSize = Math.max(12, Math.min(32, globalTitleFontSize + delta));
+            globalTitleFontSize = Math.max(10, Math.min(32, globalTitleFontSize + delta));
             document.getElementById('title-size-val').textContent = globalTitleFontSize + 'pt';
         } else if (type === 'bigQ') {
             globalBigQFontSize = Math.max(6, Math.min(36, globalBigQFontSize + delta));
@@ -2984,14 +2822,14 @@
                 activeEls = document.querySelectorAll('#preview-scale-wrapper [data-id="' + selectedId + '"]');
             }
 
-            activeEls.forEach(el => {
+            activeEls.forEach(activeEl => {
                 const ringColor = isAnswersVisible ? 'ring-red-600' : 'ring-indigo-600';
                 const borderColor = isAnswersVisible ? 'border-red-600' : 'border-indigo-600';
-                el.classList.add('ring-2', ringColor, borderColor);
+                activeEl.classList.add('ring-2', ringColor, borderColor);
             });
 
-            if (!keyHintShown && activeEls.length > 0) {
-                showNotification("💡 選択アイテムは矢印キー(↑↓←→)で上下同時に微調整できます！");
+            if (activeEls.length > 0 && !keyHintShown) {
+                showNotification("💡 選択アイテムはキーボード矢印キー(↑↓←→)で細かく位置調整可能です！");
                 keyHintShown = true;
             }
         }
