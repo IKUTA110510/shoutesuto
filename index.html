@@ -1275,6 +1275,19 @@
     async function saveFile(isSaveAs = false) {
         clearSelection(); 
 
+        // タイトルから初期ファイル名を生成 (ファイル名禁止文字を安全に置換)
+        let defaultTitle = (pageMeta[1] && pageMeta[1].title) 
+            ? pageMeta[1].title 
+            : (pageMeta[activeEditPageIndex]?.title || "2年小テスト");
+        defaultTitle = defaultTitle.replace(/[\\/:*?"<>|]/g, '_').trim();
+        if (!defaultTitle) defaultTitle = "math_quiz_twosplit";
+        const titleBasedFileName = defaultTitle + ".html";
+
+        // 別名で保存の場合は常にタイトル名、通常保存で既存ファイル名があればそれを優先
+        const suggestedFileName = isSaveAs 
+            ? titleBasedFileName 
+            : (currentFileName && currentFileName !== "math_quiz_twosplit.html" ? currentFileName : titleBasedFileName);
+
         const payload = {
             questions: questions,
             pageMeta: pageMeta,
@@ -1304,7 +1317,7 @@
             try {
                 if (isSaveAs || !currentFileHandle) {
                     const options = {
-                        suggestedName: currentFileName,
+                        suggestedName: suggestedFileName,
                         types: [{
                             description: '小テスト作成 HTMLファイル',
                             accept: { 'text/html': ['.html'] },
@@ -1328,11 +1341,11 @@
         }
 
         try {
-            let fileNameToSave = currentFileName;
-            if (isSaveAs || !currentFileName || currentFileName === "math_quiz_twosplit.html") {
-                const nameInput = prompt("保存するファイル名を入力してください:", currentFileName.replace('.html', ''));
+            let fileNameToSave = suggestedFileName;
+            if (isSaveAs || !currentFileHandle || currentFileName === "math_quiz_twosplit.html") {
+                const nameInput = prompt("保存するファイル名を入力してください:", suggestedFileName.replace('.html', ''));
                 if (nameInput === null) return;
-                fileNameToSave = nameInput.trim() ? nameInput.trim() : "math_quiz_twosplit";
+                fileNameToSave = nameInput.trim() ? nameInput.trim() : suggestedFileName.replace('.html', '');
                 if (!fileNameToSave.endsWith('.html')) fileNameToSave += '.html';
             }
 
